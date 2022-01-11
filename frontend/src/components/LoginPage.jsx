@@ -1,14 +1,16 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../contexts/UserContext';
 
-function StartPage() {
+function LoginPage(props) {
     const { user, setUser } = useContext(UserContext);
     return (
         <main className='main'>
-            <h1>start</h1>
-
+            <h1>Log In page</h1>
+            <p>
+                {JSON.stringify(user)}
+            </p>
         </main>
     );
 }
 
-export default StartPage;
+export default LoginPage;

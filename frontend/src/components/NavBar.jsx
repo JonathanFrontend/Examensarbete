@@ -7,7 +7,7 @@ function NavBar() {
         <nav className='nav'>
             <h1 className='nav-h1'>Powler</h1>
             <Link to={"/"}>Start</Link>
-            <Link to={"/main"}>Main</Link>
+            <Link to={"/user"}>User</Link>
         </nav>
     );
 }
