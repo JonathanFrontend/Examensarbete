@@ -14,8 +14,8 @@ function App() {
 
   return (
     <Router>
-      <NavBar />
       <UserContext.Provider value={userValue}>
+        <NavBar />
         <Routes>
           <Route path="/" exact element={<StartPage />} />
           <Route path="/login" element={<LoginPage />} />

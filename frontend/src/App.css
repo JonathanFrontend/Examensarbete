@@ -6,13 +6,46 @@
 
 .nav {
   width: 100%;
-  background-color: #67ABC8;
-  padding: 20px 40px;
+  background-color: hsl(198, 47%, 59%);
+  display: flex;
+  justify-content: space-between;
+  position: relative;
 }
 
-.nav-h1 {
-  font-size: 50px;
-}
+  .nav-h1 {
+    font-size: 50px;
+    color: rgb(255, 255, 255);
+    
+  }
+
+  .nav div {
+    display: flex;
+  }
+    .nav .box-1 {
+      padding: 15px 30px;
+    }
+    .nav .box-2 {
+      position: relative;
+      height: inherit;
+    }
+
+    .nav .box-2 a {
+      height: inherit;
+      background-color: hsl(198, 47%, 59%);
+      color: rgb(255, 255, 255);
+      text-decoration: none;
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+      .nav .box-2 a:hover, .nav .box-2 a:active {
+        background-color: hsl(198, 34%, 51%);
+      }
 
 .main {
   width: 100%;

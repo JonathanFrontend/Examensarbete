@@ -9,6 +9,9 @@ function UserPage(props) {
             <p>
                 {JSON.stringify(user)}
             </p>
+            <button onClick={() => setUser(null)}>
+                Log out
+            </button>
         </main>
     );
 }
