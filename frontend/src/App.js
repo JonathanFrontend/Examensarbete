@@ -6,6 +6,7 @@ import { UserContext } from './contexts/UserContext';
 import StartPage from './components/StartPage';
 import UserPage from './components/UserPage';
 import LoginPage from './components/LoginPage';
+import PollPage from './components/PollPage';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -18,6 +19,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/" exact element={<StartPage />} />
+          <Route path="/poll" element={<PollPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/user" element={<UserPage />} />
         </Routes>

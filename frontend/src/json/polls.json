@@ -1,0 +1,118 @@
+[
+    {
+        "id": "1",
+        "title": "Improved car",
+        "author": "Audi",
+        "description": "We're designing a new car and want to improve it from previous cars.",
+        "tags": [
+            "cars",
+            "driving"
+        ],
+        "poll": [
+            {
+                "question": "What was the latest car from Audi you drove",
+                "type": {
+                    "type": "radio",
+                    "options": [
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "A1",
+                        "A2",
+                        "A3"
+                    ]
+                },
+                "required": true
+            },
+            {
+                "question": "What did you like about this car?",
+                "type": {
+                    "type": "checkbox",
+                    "options": [
+                        "It's use of gas",
+                        "The turning ability",
+                        "The durability",
+                        "The wheels",
+                        "The acceleration",
+                        "None of the above"
+                    ]
+                },
+                "required": true
+            },
+            {
+                "question": "What should be improved?",
+                "type": {
+                    "type": "checkbox",
+                    "options": [
+                        "It's use of gas",
+                        "The turning ability",
+                        "The durability",
+                        "The wheels",
+                        "The acceleration",
+                        "None of the above"
+                    ]
+                },
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": "2",
+        "title": "GTA 6 ideas",
+        "author": "Rockstar Games",
+        "description": "Before we make GTA VI, we want to know how to improve the experience.",
+        "tags": [
+            "gta",
+            "games"
+        ],
+        "poll": [
+            {
+                "question": "What GTA game had the best controls?",
+                "type": {
+                    "type": "radio",
+                    "options": [
+                        "GTA 3",
+                        "GTA Vice City",
+                        "GTA SA",
+                        "GTA 4",
+                        "GTA V"
+                    ]
+                }
+            },
+            {
+                "question": "What game had the best missions?",
+                "type": {
+                    "type": "radio",
+                    "options": [
+                        "GTA 3",
+                        "GTA Vice City",
+                        "GTA SA",
+                        "GTA 4",
+                        "GTA V"
+                    ]
+                }
+            },
+            {
+                "question": "What game had the best story?",
+                "type": {
+                    "type": "radio",
+                    "options": [
+                        "GTA 3",
+                        "GTA Vice City",
+                        "GTA SA",
+                        "GTA 4",
+                        "GTA V"
+                    ]
+                }
+            },
+            {
+                "question": "I want GTA 6 to be more: ",
+                "type": {
+                    "type": "axis",
+                    "left": "comedic and denser",
+                    "right": "serious and darker"
+                }
+            }
+        ]
+    }
+]

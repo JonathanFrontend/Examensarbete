@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "polls",
+  "info": {
+    "singularName": "poll",
+    "pluralName": "polls",
+    "displayName": "Poll",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "questions": {
+      "type": "json",
+      "required": true
+    },
+    "pollEndsAt": {
+      "type": "date"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "polls"
+    }
+  }
+}

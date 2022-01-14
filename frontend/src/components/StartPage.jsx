@@ -1,12 +1,30 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../contexts/UserContext';
+import polls from "./../json/polls.json"
+import PollObject from './PollObject';
 
 function StartPage() {
     const { user, setUser } = useContext(UserContext);
-    return (
-        <main className='main'>
-            <h1>start</h1>
+    /* const [ polls, setPolls ] = useState([]);
+    useEffect(() => {
 
+    }, []) */
+    return (
+        <main className='main start-main'>
+            <section className='section start-section'>
+                <div className='section-div'>
+                    <div>
+                        <h1>
+                            New polls today
+                        </h1>
+                    </div>
+                    <div>
+                        {
+                            polls.map((poll, i) => <PollObject key={i} poll={poll} />)
+                        }
+                    </div>
+                </div>
+            </section>
         </main>
     );
 }
