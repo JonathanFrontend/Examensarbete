@@ -8,9 +8,9 @@
             "cars",
             "driving"
         ],
-        "poll": [
+        "questions": [
             {
-                "question": "What was the latest car from Audi you drove",
+                "question": "What was the latest car from Audi that you drove",
                 "type": {
                     "type": "radio",
                     "options": [
@@ -65,7 +65,7 @@
             "gta",
             "games"
         ],
-        "poll": [
+        "questions": [
             {
                 "question": "What GTA game had the best controls?",
                 "type": {
