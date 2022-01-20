@@ -7,14 +7,23 @@ function PollObject({ poll }) {
     const navigate = useNavigate();
     const state = useSelector(state => state);
     const dispatch = useDispatch();
+
+    const pollInfo = {
+        id: poll.id,
+        title: poll.title,
+        author: poll.author,
+        description: poll.description,
+        tags: poll.tags
+    }
+
     return (
         <div onClick={() => {
-            let ls = localStorage.getItem("chosenPoll");
-            dispatch({ type: UPDATE_POLL, payload: { ...state, poll: poll } });
+            // let ls = localStorage.getItem("chosenPoll");
+            dispatch({ type: UPDATE_POLL, payload: { pollInfo: pollInfo, pollQuestions: poll.questions } });
             navigate(`/poll`);
         }}>
-            <h4>{poll.title}</h4>
-            <h6>{poll.author}</h6>
+            <h4>{pollInfo.title}</h4>
+            <h6>{pollInfo.author}</h6>
         </div>
     );
 }

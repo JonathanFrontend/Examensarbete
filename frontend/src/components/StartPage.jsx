@@ -1,10 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { UserContext } from '../contexts/UserContext';
 import polls from "./../json/polls.json"
 import PollObject from './PollObject';
 
 function StartPage() {
+    const pollInfo = useSelector(state => state.pollInfo);
+    const pollQuestions = useSelector(state => state.pollQuestions);
+
     const { user, setUser } = useContext(UserContext);
+
+    // console.log("state", chosenPoll, answeredQuestions);
+
     /* const [ polls, setPolls ] = useState([]);
     useEffect(() => {
 

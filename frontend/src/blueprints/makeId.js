@@ -1,0 +1,1 @@
+export const makeId = (a, b, c) => `${a}-${b}-${c}`;

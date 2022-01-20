@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "answered_polls",
+  "info": {
+    "singularName": "answered-poll",
+    "pluralName": "answered-polls",
+    "displayName": "AnsweredPoll"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "pollAnswers": {
+      "type": "json"
+    },
+    "poll": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::poll.poll",
+      "inversedBy": "answered_polls"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "answered_polls"
+    }
+  }
+}

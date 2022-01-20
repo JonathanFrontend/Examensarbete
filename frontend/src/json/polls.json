@@ -11,47 +11,41 @@
         "questions": [
             {
                 "question": "What was the latest car from Audi that you drove",
-                "type": {
-                    "type": "radio",
-                    "options": [
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "A1",
-                        "A2",
-                        "A3"
-                    ]
-                },
+                "type": "radio",
+                "options": [
+                    "Q1",
+                    "Q2",
+                    "Q3",
+                    "A1",
+                    "A2",
+                    "A3"
+                ],
                 "required": true
             },
             {
                 "question": "What did you like about this car?",
-                "type": {
-                    "type": "checkbox",
-                    "options": [
-                        "It's use of gas",
-                        "The turning ability",
-                        "The durability",
-                        "The wheels",
-                        "The acceleration",
-                        "None of the above"
-                    ]
-                },
+                "type": "checkbox",
+                "options": [
+                    "It's use of gas",
+                    "The turning ability",
+                    "The durability",
+                    "The wheels",
+                    "The acceleration",
+                    "None of the above"
+                ],
                 "required": true
             },
             {
                 "question": "What should be improved?",
-                "type": {
-                    "type": "checkbox",
-                    "options": [
-                        "It's use of gas",
-                        "The turning ability",
-                        "The durability",
-                        "The wheels",
-                        "The acceleration",
-                        "None of the above"
-                    ]
-                },
+                "type": "checkbox",
+                "options": [
+                    "It's use of gas",
+                    "The turning ability",
+                    "The durability",
+                    "The wheels",
+                    "The acceleration",
+                    "None of the above"
+                ],
                 "required": true
             }
         ]
@@ -68,50 +62,42 @@
         "questions": [
             {
                 "question": "What GTA game had the best controls?",
-                "type": {
-                    "type": "radio",
-                    "options": [
-                        "GTA 3",
-                        "GTA Vice City",
-                        "GTA SA",
-                        "GTA 4",
-                        "GTA V"
-                    ]
-                }
+                "type": "radio",
+                "options": [
+                    "GTA 3",
+                    "GTA Vice City",
+                    "GTA SA",
+                    "GTA 4",
+                    "GTA V"
+                ]
             },
             {
                 "question": "What game had the best missions?",
-                "type": {
-                    "type": "radio",
-                    "options": [
-                        "GTA 3",
-                        "GTA Vice City",
-                        "GTA SA",
-                        "GTA 4",
-                        "GTA V"
-                    ]
-                }
+                "type": "radio",
+                "options": [
+                    "GTA 3",
+                    "GTA Vice City",
+                    "GTA SA",
+                    "GTA 4",
+                    "GTA V"
+                ]
             },
             {
                 "question": "What game had the best story?",
-                "type": {
-                    "type": "radio",
-                    "options": [
-                        "GTA 3",
-                        "GTA Vice City",
-                        "GTA SA",
-                        "GTA 4",
-                        "GTA V"
-                    ]
-                }
+                "type": "radio",
+                "options": [
+                    "GTA 3",
+                    "GTA Vice City",
+                    "GTA SA",
+                    "GTA 4",
+                    "GTA V"
+                ]
             },
             {
                 "question": "I want GTA 6 to be more: ",
-                "type": {
-                    "type": "axis",
-                    "left": "comedic and denser",
-                    "right": "serious and darker"
-                }
+                "type": "axis",
+                "left": "comedic and denser",
+                "right": "serious and darker"
             }
         ]
     }

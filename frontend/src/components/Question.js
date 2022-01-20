@@ -1,5 +1,7 @@
 import React from 'react';
-import RadioQuestion from './RadioQuestion';
+import RadioQuestion from '../QuestionTypes/RadioQuestion';
+import RatingQuestion from '../QuestionTypes/RatingQuestion';
+import CheckboxQuestion from '../QuestionTypes/CheckboxQuestion';
 
 function Question({ question, index }) {
     console.log("question", question, index);
@@ -11,38 +13,18 @@ function Question({ question, index }) {
         }
     }
 
-    function TheQuestion({ q, i }) {
-        switch (q.type.type) {
+    function Scanner({ q, qIndex }) {
+        console.log("q", q)
+        switch (q.type) {
             case "radio":
-
-                return <RadioQuestion q={q} qIndex={i} />;
+                return <RadioQuestion q={q} qIndex={qIndex} />;
             case "checkbox":
-                return <div>
-                    {
-                        q.type.options.map((o, i) => <div key={i}>
-                            <input type={"checkbox"} name={`${index}`} id={`${o}`} />
-                            <label htmlFor={`${o}`}> {o} </label>
-                        </div>)
-                    }
-                </div>;
-            case "axis":
-                return <div>
-                    {
-                        q.type.options.map((o, i) => <div key={i}>
-                            <input type={"radio"} name={`${index}`} id={`${o}`} />
-                            <label htmlFor={`${o}`}> {o} </label>
-                        </div>)
-                    }
-                </div>;
+                return <CheckboxQuestion q={q} qIndex={qIndex} />;
+            case "rating":
+                return <RatingQuestion q={q} qIndex={qIndex} />;
             case "text":
                 return <div>
                     <input type={"text"} />
-                </div>;
-            case "rating":
-                return <div >
-                    {/* {
-                        ratingLoop(10)
-                    } */}
                 </div>;
             default:
                 return <div>
@@ -54,7 +36,7 @@ function Question({ question, index }) {
         <section>
             <h3>{question.question}</h3>
             {
-                <TheQuestion q={question} i={index} />
+                <Scanner q={question} qIndex={index} />
             }
         </section>
     );

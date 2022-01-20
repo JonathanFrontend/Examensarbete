@@ -68,6 +68,12 @@
       "relation": "oneToMany",
       "target": "api::poll.poll",
       "mappedBy": "users_permissions_user"
+    },
+    "answered_polls": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::answered-poll.answered-poll",
+      "mappedBy": "users_permissions_user"
     }
   }
 }

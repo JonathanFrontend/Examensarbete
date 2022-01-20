@@ -5,31 +5,53 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { ANSWER_QUESTION, REMOVE_POLL, UPDATE_POLL } from './texts';
+import { ANSWER_QUESTION, REMOVE_POLL, UPDATE_POLL, RESET } from './texts';
+
+// poll: localStorage.getItem("chosenPoll") ? JSON.parse(localStorage.getItem("chosenPoll")) : {}
+// localStorage.getItem("answeredQuestions") ? JSON.parse(localStorage.getItem("answeredQuestions")) : []
 
 const initState = {
-  poll: localStorage.getItem("chosenPoll") ? JSON.parse(localStorage.getItem("chosenPoll")) : {}
+  pollInfo: {},
+  pollQuestions: [],
+  answeredQuestions: []
 }
 
 function reducer(state = initState, action) {
   switch (action.type) {
     case UPDATE_POLL:
-      localStorage.setItem("chosenPoll", JSON.stringify(action.payload))
+      // localStorage.setItem("chosenPoll", JSON.stringify(action.payload))
       return {
         ...state,
-        poll: action.payload
+        pollInfo: action.payload.pollInfo,
+        pollQuestions: action.payload.pollQuestions
       };
+
     case ANSWER_QUESTION:
+      let stateCopy = { ...state };
+      let aqCopy = [...stateCopy.answeredQuestions];
+
+      for (let i = 0; i < aqCopy.length; i++) {
+        if (aqCopy[i].indexOfQuestion == action.payload.indexOfQuestion) {
+          aqCopy.splice(i, 1);
+        }
+      }
+      aqCopy.push(action.payload);
+
+      // localStorage.setItem("answeredQuestions", JSON.stringify(stateCopy.answeredQuestions));
+      aqCopy.sort((a, b) => a.indexOfQuestion - b.indexOfQuestion);
+      console.log("action.payload", action.payload)
       return {
         ...state,
-        poll: {}
+        answeredQuestions: aqCopy
       };
-    case REMOVE_POLL:
-      localStorage.setItem("chosenPoll", "{}")
+
+    case RESET:
       return {
         ...state,
-        poll: {}
-      };
+        pollInfo: {},
+        pollQuestions: []
+      }
+
     default:
       return state;
   }
