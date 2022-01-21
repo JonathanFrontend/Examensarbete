@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Answer } from '../blueprints/Answer';
 import { makeId } from '../blueprints/makeId';
@@ -7,6 +7,19 @@ import { ANSWER_QUESTION, UPDATE_POLL } from '../texts';
 //index = question's index; i = options index.
 function RadioQuestion({ q, qIndex }) {
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch({
+            type: ANSWER_QUESTION,
+            payload: {
+                typeOfQuestion: "radio",
+                answer: "",
+                indexOfQuestion: qIndex,
+                question: q.question,
+                indexOfPickedOption: undefined,
+            }
+        });
+    }, []);
 
     const onChange = (e, oIndex) => {
 

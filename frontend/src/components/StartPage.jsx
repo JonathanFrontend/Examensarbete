@@ -1,14 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { UserContext } from '../contexts/UserContext';
-import polls from "./../json/polls.json"
+// import polls from "./../json/polls.json"
 import PollObject from './PollObject';
 
 function StartPage() {
     const pollInfo = useSelector(state => state.pollInfo);
     const pollQuestions = useSelector(state => state.pollQuestions);
+    const [polls, setPolls] = useState([]);
 
     const { user, setUser } = useContext(UserContext);
+
+
+    useEffect(() => {
+        fetch("http://localhost:1337/api/polls?populate=*").then(r => r.json()).then(d => {
+            console.log("data: ", d.data);
+            setPolls(d.data);
+        }).catch(err => console.error(err));
+    }, []);
 
     // console.log("state", chosenPoll, answeredQuestions);
 
@@ -27,7 +36,7 @@ function StartPage() {
                     </div>
                     <div>
                         {
-                            polls.map((poll, i) => <PollObject key={i} poll={poll} />)
+                            polls.map((poll, i) => <PollObject key={i} poll={poll.attributes} />)
                         }
                     </div>
                 </div>

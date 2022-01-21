@@ -18,7 +18,8 @@
                     "Q3",
                     "A1",
                     "A2",
-                    "A3"
+                    "A3",
+                    "None of the above"
                 ],
                 "required": true
             },
@@ -30,8 +31,7 @@
                     "The turning ability",
                     "The durability",
                     "The wheels",
-                    "The acceleration",
-                    "None of the above"
+                    "The acceleration"
                 ],
                 "required": true
             },
@@ -43,8 +43,7 @@
                     "The turning ability",
                     "The durability",
                     "The wheels",
-                    "The acceleration",
-                    "None of the above"
+                    "The acceleration"
                 ],
                 "required": true
             }

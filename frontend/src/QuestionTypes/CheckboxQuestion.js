@@ -9,6 +9,7 @@ import { ANSWER_QUESTION, UPDATE_POLL, NOTA } from '../texts';
 function CheckboxQuestion({ q, qIndex }) {
     const [payload, setPayload] = useState({});
     const [answerArr, setAnswerArr] = useState([]);
+    const [notaChecked, setNotaChecked] = useState(false);
     const firstRender = useRef(false);
     const dispatch = useDispatch();
 
@@ -29,20 +30,35 @@ function CheckboxQuestion({ q, qIndex }) {
                 }
             });
         } else {
+            dispatch({
+                type: ANSWER_QUESTION,
+                payload: {
+                    typeOfQuestion: "checkbox",
+                    answer: [],
+                    indexOfQuestion: qIndex,
+                    question: q.question,
+                    //indexOfPickedOption: i,
+                }
+            });
             firstRender.current = true;
         }
-    }, [answerArr])
+    }, [answerArr]);
 
     const onChange = (e, oIndex) => {
 
         // const answer = new Answer(e.target.value, q.question, e.target.type, qIndex);
         // console.log("answer", answer);
-        console.log(e.target.checked);
-        console.log("before useEffect", answerArr);
+        // console.log(e.target.checked);
+        // console.log("before useEffect", answerArr);
 
 
         if (e.target.checked) {
-            if (e.target.value === NOTA) {
+            let answerArrCopy = [...answerArr];
+
+            answerArrCopy.push(e.target.value);
+
+            setAnswerArr(answerArrCopy);
+            /* if (e.target.value === NOTA) {
                 setAnswerArr([e.target.value]);
             } else {
                 //let answerArrCopy = [];
@@ -58,7 +74,7 @@ function CheckboxQuestion({ q, qIndex }) {
                 answerArrCopy.push(e.target.value);
 
                 setAnswerArr(answerArrCopy);
-            }
+            } */
         } else if (!e.target.checked) {
             let answerArrCopy = [...answerArr];
 
@@ -75,8 +91,16 @@ function CheckboxQuestion({ q, qIndex }) {
         <div>
             {
                 q.options.map((o, i) => <div key={i}>
-                    <input type={"checkbox"} value={`${o}`} checked={state.answeredQuestions} name={`${qIndex}`} id={makeId(qIndex, o, i)} onChange={(e) => {
-
+                    <input type={"checkbox"} value={`${o}`} className={`question-${qIndex}`} name={`${qIndex}`} id={makeId(qIndex, o, i)} onChange={(e, i) => {
+                        /* if (e.target.value !== NOTA) {
+                            setNotaChecked(false)
+                        }
+                        if (e.target.value === NOTA) {
+                            console.log("e.target.checked", e.target.checked)
+                            let d = document.querySelectorAll(`.question-${qIndex}`);
+                            console.log(d);
+                            setNotaChecked(e.target.checked)
+                        } */
                         onChange(e, i);
                     }} />
                     <label htmlFor={makeId(qIndex, o, i)}> {o} </label>
