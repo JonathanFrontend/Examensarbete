@@ -38,6 +38,12 @@
       "relation": "oneToMany",
       "target": "api::answered-poll.answered-poll",
       "mappedBy": "poll"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::tag.tag",
+      "inversedBy": "polls"
     }
   }
 }

@@ -120,3 +120,8 @@ body {
 .section-div > div:nth-child(1) h1 {
   color: #fff;
 }
+
+.poll-object {
+  border-bottom: .5px solid rgba(133, 218, 255, 0.6);
+  cursor: pointer;
+}

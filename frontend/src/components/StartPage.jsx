@@ -17,6 +17,11 @@ function StartPage() {
             console.log("data: ", d.data);
             setPolls(d.data);
         }).catch(err => console.error(err));
+        /* 
+                fetch("http://localhost:1337/api/users").then(r => r.json()).then(d => {
+                    console.log("users: ", d.data);
+                }).catch(err => console.error(err)); */
+
     }, []);
 
     // console.log("state", chosenPoll, answeredQuestions);
@@ -36,7 +41,7 @@ function StartPage() {
                     </div>
                     <div>
                         {
-                            polls.map((poll, i) => <PollObject key={i} poll={poll.attributes} />)
+                            polls.map((poll, i) => <PollObject key={i} pollObject={poll} />)
                         }
                     </div>
                 </div>
