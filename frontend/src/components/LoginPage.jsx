@@ -38,11 +38,14 @@ function LoginPage(props) {
                             password: passwordinput
                         })
                     }).then(r => r.json()).then(d => {
-                        setUser(d);
-                        localStorage.setItem("user", JSON.stringify(d));
+                        if (d.user) {
+                            setUser(d);
+                            localStorage.setItem("user", JSON.stringify(d));
+                            navigate('/user')
+                        }
+
                     }).catch(err => console.error(err));
 
-                    navigate('/user')
                 }}>Log in</button>
             </section>
 

@@ -25,13 +25,16 @@ function PollPage(props) {
             method: "POST",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
-                'Authorization': `Bearer ${user.jwt}`
+                "Authorization": "Token " + user.jwt
             },
             body: JSON.stringify({
-                pollAnswers: answeredQuestions,
-                poll: pollInfo.id,
-                author: user.id
-            })
+                data: {
+                    pollAnswers: answeredQuestions,
+                    poll: pollInfo.id,
+                    author: user.user.id
+                }
+            }),
+            // authorization: { token: user.jwt }
         }).then(r => r.json()).then(d => {
             console.log(d);
         }).catch(err => console.error(err));

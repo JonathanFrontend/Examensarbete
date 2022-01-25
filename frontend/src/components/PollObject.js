@@ -24,9 +24,16 @@ function PollObject({ pollObject }) {
             dispatch({ type: UPDATE_POLL, payload: { pollInfo: pollInfo, pollQuestions: poll.questions } });
             navigate(`/poll`);
         }} className='poll-object'>
-            <h4>{pollInfo.title}</h4>
-            <h5>{pollInfo.author.username}</h5>
-            <h6>{pollInfo.description}</h6>
+            <div>
+                <h4>{pollInfo.title}</h4>
+                <h5>{pollInfo.author.username}</h5>
+                <h6>{pollInfo.description}</h6>
+            </div>
+            <div>
+                <button onClick={(e) => navigate(`/pollresults/:${pollInfo.id}`)}>
+                    Results (so far)
+                </button>
+            </div>
         </div>
     );
 }
