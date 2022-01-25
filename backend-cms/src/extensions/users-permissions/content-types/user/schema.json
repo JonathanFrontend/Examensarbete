@@ -73,7 +73,7 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::answered-poll.answered-poll",
-      "mappedBy": "users_permissions_user"
+      "mappedBy": "author"
     }
   }
 }

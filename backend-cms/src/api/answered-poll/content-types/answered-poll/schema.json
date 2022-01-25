@@ -4,7 +4,8 @@
   "info": {
     "singularName": "answered-poll",
     "pluralName": "answered-polls",
-    "displayName": "AnsweredPoll"
+    "displayName": "AnsweredPoll",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -20,7 +21,7 @@
       "target": "api::poll.poll",
       "inversedBy": "answered_polls"
     },
-    "users_permissions_user": {
+    "author": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",

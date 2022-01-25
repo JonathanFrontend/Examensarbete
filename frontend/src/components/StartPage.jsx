@@ -11,16 +11,20 @@ function StartPage() {
 
     const { user, setUser } = useContext(UserContext);
 
-
     useEffect(() => {
         fetch("http://localhost:1337/api/polls?populate=*").then(r => r.json()).then(d => {
             // console.log("data: ", d.data);
             setPolls(d.data);
         }).catch(err => console.error(err));
-        /* 
-                fetch("http://localhost:1337/api/users").then(r => r.json()).then(d => {
-                    console.log("users: ", d.data);
-                }).catch(err => console.error(err)); */
+
+        if (localStorage.getItem("user")) {
+            console.log('JSON.parse(localStorage.getItem("user"))', JSON.parse(localStorage.getItem("user")))
+            if (JSON.parse(localStorage.getItem("user"))) {
+                setUser(JSON.parse(localStorage.getItem("user")));
+            } else if (!JSON.parse(localStorage.getItem("user"))) {
+                setUser(null);
+            }
+        }
 
     }, []);
 

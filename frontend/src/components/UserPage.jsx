@@ -9,10 +9,11 @@ function UserPage(props) {
         <main className='main'>
             <h1>User page</h1>
             <p>
-                {JSON.stringify(user)}
+                {user && JSON.stringify(user.user)}
             </p>
             <button onClick={() => {
                 setUser(null);
+                localStorage.setItem("user", JSON.stringify(null));
                 navigate("/login");
             }}>
                 Log out
