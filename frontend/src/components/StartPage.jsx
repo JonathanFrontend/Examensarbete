@@ -14,7 +14,7 @@ function StartPage() {
 
     useEffect(() => {
         fetch("http://localhost:1337/api/polls?populate=*").then(r => r.json()).then(d => {
-            console.log("data: ", d.data);
+            // console.log("data: ", d.data);
             setPolls(d.data);
         }).catch(err => console.error(err));
         /* 

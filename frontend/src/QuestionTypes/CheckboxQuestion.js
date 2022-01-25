@@ -14,11 +14,11 @@ function CheckboxQuestion({ q, qIndex }) {
     const dispatch = useDispatch();
 
     const state = useSelector(state => state);
-    console.log("state", state)
+    // console.log("state", state)
 
     useEffect(() => {
         if (firstRender.current) {
-            console.log("useEffect", answerArr);
+
             dispatch({
                 type: ANSWER_QUESTION,
                 payload: {

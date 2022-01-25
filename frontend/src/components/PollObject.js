@@ -7,7 +7,7 @@ function PollObject({ pollObject }) {
     const navigate = useNavigate();
     const state = useSelector(state => state);
     const dispatch = useDispatch();
-    console.log("state", state)
+
     const poll = pollObject.attributes;
 
     const pollInfo = {

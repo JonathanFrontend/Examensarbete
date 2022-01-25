@@ -10,11 +10,21 @@ function PollPage(props) {
     // const param = useParams();
     // const poll = polls.find(p => p.id === param.id)
     // console.log("params poll", param, poll)
+    const state = useSelector(state => state);
     const pollInfo = useSelector(state => state.pollInfo);
     const pollQuestions = useSelector(state => state.pollQuestions);
-    console.log("pollQuestions", pollQuestions);
+    const answeredQuestions = useSelector(state => state.answeredQuestions);
     const dispatch = useDispatch();
+    console.log("state", state);
+    console.log("answeredQuestions", answeredQuestions);
     function submitPoll() {
+        /* fetch("http://localhost:1337/api/answered-polls", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(
+                { title: "Vue POST Request Example" }
+            )
+        }).then(r => r.json).then(d => console.log(d)).catch(err => console.log(err)) */
         dispatch({ type: RESET });
         navigate("/");
     }

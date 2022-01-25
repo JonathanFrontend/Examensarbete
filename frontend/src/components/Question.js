@@ -3,8 +3,28 @@ import RadioQuestion from '../QuestionTypes/RadioQuestion';
 import RatingQuestion from '../QuestionTypes/RatingQuestion';
 import CheckboxQuestion from '../QuestionTypes/CheckboxQuestion';
 
+function Scanner({ q, qIndex }) {
+    // console.log("q", q)
+    switch (q.type) {
+        case "radio":
+            return <RadioQuestion q={q} qIndex={qIndex} />;
+        case "checkbox":
+            return <CheckboxQuestion q={q} qIndex={qIndex} />;
+        case "rating":
+            return <RatingQuestion q={q} qIndex={qIndex} />;
+        case "text":
+            return <div>
+                <input type={"text"} />
+            </div>;
+        default:
+            return <div>
+                <input type={"text"} />
+            </div>;
+    }
+}
+
 function Question({ question, index }) {
-    console.log("question", question, index);
+
 
     const ratingLoop = (n) => {
         let stars = "";
@@ -13,25 +33,7 @@ function Question({ question, index }) {
         }
     }
 
-    function Scanner({ q, qIndex }) {
-        console.log("q", q)
-        switch (q.type) {
-            case "radio":
-                return <RadioQuestion q={q} qIndex={qIndex} />;
-            case "checkbox":
-                return <CheckboxQuestion q={q} qIndex={qIndex} />;
-            case "rating":
-                return <RatingQuestion q={q} qIndex={qIndex} />;
-            case "text":
-                return <div>
-                    <input type={"text"} />
-                </div>;
-            default:
-                return <div>
-                    <input type={"text"} />
-                </div>;
-        }
-    }
+
     return (
         <section>
             <h3>{question.question}</h3>
