@@ -17,6 +17,29 @@ function PollResults(props) {
         ).catch(err => console.error(err));
     }, []);
 
+    const voteCounter = (poll) => {
+        if (poll) {
+            const answers = [];
+            const answeredPolls = poll.answered_polls.data;
+            // console.log("poll", poll)
+            for (let i = 0; i < poll.questions.length; i++) {
+                answers.push([]);
+            }
+
+            console.log("answers Before loop", answers);
+
+            for (let i = 0; i < answeredPolls.length; i++) {
+                const pollAnswers = answeredPolls[i].attributes.pollAnswers;
+                for (let j = 0; j < pollAnswers.length; j++) {
+                    // console.log("pollAnswers[j].answer", pollAnswers[j].answer);
+                    answers[pollAnswers[j].indexOfQuestion].push(pollAnswers[j].answer);
+                }
+            }
+            console.log(poll);
+            console.log("answers After loop", answers);
+        }
+    }
+
     return (
         <main className='main start-main'>
             <section className='section start-section'>
@@ -30,7 +53,7 @@ function PollResults(props) {
                     </div>
                     <div>
                         {
-                            currentPoll.answered_polls
+                            voteCounter(currentPoll)
                         }
                     </div>
                     <button>
