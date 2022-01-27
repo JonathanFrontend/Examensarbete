@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom';
 
 function PollResults(props) {
     const [currentPoll, setCurrentPoll] = useState(null);
-    const [answers, setAnwers] = useState([]);
-    const [sortedAnswers, setSortedAnswers] = useState([]);
+    // const [answers, setAnwers] = useState([]);
+    const [thePollResults, setThePollResults] = useState([]);
     const params = useParams();
-    console.log("params", params);
+    // console.log("params", params);
 
-    const voteCounter = (poll) => {
+    const sortingAnswers = (poll) => {
         if (poll) {
             const answersCopy = [];
             const answeredPolls = poll.answered_polls.data;
@@ -17,7 +17,7 @@ function PollResults(props) {
                 answersCopy.push([]);
             }
 
-            console.log("answers Before loop", answersCopy);
+            // console.log("answers Before loop", answersCopy);
 
             for (let i = 0; i < answeredPolls.length; i++) {
                 const pollAnswers = answeredPolls[i].attributes.pollAnswers;
@@ -26,61 +26,44 @@ function PollResults(props) {
                     answersCopy[pollAnswers[j].indexOfQuestion].push(pollAnswers[j].answer);
                 }
             }
-            console.log(poll);
-            console.log("answers After loop", answersCopy);
+            // console.log(poll);
+            // console.log("answers After loop", answersCopy);
             // setAnwers(answersCopy);
             return answersCopy;
         }
     }
 
-    useEffect(() => {
-        fetch(`http://localhost:1337/api/polls/${params.id}?populate=*`).then(
-            r => r.json()
-        ).then(
-            d => {
-                console.log("d", d)
-                setCurrentPoll(d.data.attributes);
-                setAnwers(voteCounter(d.data.attributes));
-            }
-        ).catch(err => console.error(err));
-    }, []);
-
-    useEffect(() => {
+    function voteCounter(answers, currentPoll) {
         if (answers && currentPoll) {
             const answersCopy = [...answers];
             const sortedAnswersCopy = [];
-            for (let i = 0; i < answersCopy.length; i++) {
-                sortedAnswersCopy.push([]);
-            };
             const questions = currentPoll.questions;
+            // console.log("questions", questions)
+            for (let i = 0; i < questions.length; i++) {
+                sortedAnswersCopy.push({ question: questions[i].question, answers: [] });
+            };
 
-            function getOccurrence(array, value) {
-                let count = 0;
-                array.forEach((v) => (v === value && count++));
+            function getVotes(array, value) {
+                let votes = 0;
+                array.forEach((v) => (v === value && votes++));
                 return {
                     answer: value,
-                    votes: count
+                    votes: votes
                 };
             };
-            console.log("answersCopy", answersCopy)
 
             for (let i = 0; i < questions.length; i++) {
                 const q = questions[i];
                 if (q.type == "radio") {
                     for (let j = 0; j < q.options.length; j++) {
-                        sortedAnswersCopy[i].push(getOccurrence(answersCopy[i], q.options[j]));
+                        sortedAnswersCopy[i].answers.push(getVotes(answersCopy[i], q.options[j]));
                     }
-                    console.log("sortedAnswersCopy", sortedAnswersCopy)
 
                 } else if (q.type == "checkbox") {
                     for (let j = 0; j < q.options.length; j++) {
-
-                        console.log("q.options", q.options[j]);
                         const arr = [...answersCopy[i]];
                         const flatArr = arr.flat(Infinity);
-                        console.log("answersCopy[i]", answersCopy[i]);
-                        console.log("flatArr", flatArr);
-                        sortedAnswersCopy[i].push(getOccurrence(flatArr, q.options[j]));
+                        sortedAnswersCopy[i].answers.push(getVotes(flatArr, q.options[j]));
 
                         /* const concattedArr = [];
 
@@ -97,13 +80,26 @@ function PollResults(props) {
                         console.log("sortedAnswersCopy[i] after push", sortedAnswersCopy[i]); */
 
                     }
-                    console.log("sortedAnswersCopy", sortedAnswersCopy)
+                    // console.log("sortedAnswersCopy", sortedAnswersCopy)
 
                 }
             };
-            setSortedAnswers(sortedAnswersCopy);
+            return sortedAnswersCopy;
         }
-    }, [answers])
+    }
+
+    useEffect(() => {
+        fetch(`http://localhost:1337/api/polls/${params.id}?populate=*`).then(
+            r => r.json()
+        ).then(
+            d => {
+                // console.log("d", d)
+                setCurrentPoll(d.data.attributes);
+                //setAnwers(sortingAnswers(d.data.attributes));
+                setThePollResults(voteCounter(sortingAnswers(d.data.attributes), d.data.attributes));
+            }
+        ).catch(err => console.error(err));
+    }, []);
 
     return (
         <main className='main start-main'>
@@ -118,7 +114,7 @@ function PollResults(props) {
                     </div>
                     <div>
                         {
-                            console.log("sortedAnswers", sortedAnswers)
+                            console.log("thePollResults", thePollResults)
                         }
                     </div>
                     <button>
