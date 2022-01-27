@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import ResultQuestion from './ResultQuestion';
 
 function PollResults(props) {
     const [currentPoll, setCurrentPoll] = useState(null);
@@ -114,7 +115,7 @@ function PollResults(props) {
                     </div>
                     <div>
                         {
-                            console.log("thePollResults", thePollResults)
+                            thePollResults ? thePollResults.map((q, i) => <ResultQuestion key={i} qna={q} />) : "loading... please wait"
                         }
                     </div>
                     <button>
