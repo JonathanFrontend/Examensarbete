@@ -75,7 +75,27 @@ function PollResults(props) {
                 } else if (q.type == "checkbox") {
                     for (let j = 0; j < q.options.length; j++) {
 
-                        sortedAnswersCopy[i].push(getOccurrence(answersCopy[i], q.options[j]));
+                        console.log("q.options", q.options[j]);
+                        const arr = [...answersCopy[i]];
+                        const flatArr = arr.flat(Infinity);
+                        console.log("answersCopy[i]", answersCopy[i]);
+                        console.log("flatArr", flatArr);
+                        sortedAnswersCopy[i].push(getOccurrence(flatArr, q.options[j]));
+
+                        /* const concattedArr = [];
+
+                        for (let k = 0; k < answersCopy[i].length; k++) {
+                            concattedArr.concat(answersCopy[i][k])
+                        }
+
+                        console.log("concattedArr", concattedArr);
+
+                        console.log("sortedAnswersCopy[i] before push", sortedAnswersCopy[i]);
+
+                        sortedAnswersCopy[i].push(getOccurrence(concattedArr, q.options[j]));
+
+                        console.log("sortedAnswersCopy[i] after push", sortedAnswersCopy[i]); */
+
                     }
                     console.log("sortedAnswersCopy", sortedAnswersCopy)
 
