@@ -14,17 +14,17 @@ function PollResults(props) {
             const answersCopy = [];
             const answeredPolls = poll.answered_polls.data;
             // console.log("poll", poll)
-            for (let i = 0; i < poll.questions.length; i++) {
+            for (let q of poll.questions) {
                 answersCopy.push([]);
             }
 
             // console.log("answers Before loop", answersCopy);
 
-            for (let i = 0; i < answeredPolls.length; i++) {
-                const pollAnswers = answeredPolls[i].attributes.pollAnswers;
-                for (let j = 0; j < pollAnswers.length; j++) {
+            for (let a of answeredPolls) {
+                const pollAnswers = a.attributes.pollAnswers;
+                for (let j of pollAnswers) {
                     // console.log("pollAnswers[j].answer", pollAnswers[j].answer);
-                    answersCopy[pollAnswers[j].indexOfQuestion].push(pollAnswers[j].answer);
+                    answersCopy[j.indexOfQuestion].push(j.answer);
                 }
             }
             // console.log(poll);
@@ -40,8 +40,8 @@ function PollResults(props) {
             const sortedAnswersCopy = [];
             const questions = currentPoll.questions;
             // console.log("questions", questions)
-            for (let i = 0; i < questions.length; i++) {
-                sortedAnswersCopy.push({ question: questions[i].question, answers: [] });
+            for (let q of questions) {
+                sortedAnswersCopy.push({ question: q.question, answers: [] });
             };
 
             function getVotes(array, value) {
@@ -56,15 +56,15 @@ function PollResults(props) {
             for (let i = 0; i < questions.length; i++) {
                 const q = questions[i];
                 if (q.type == "radio") {
-                    for (let j = 0; j < q.options.length; j++) {
-                        sortedAnswersCopy[i].answers.push(getVotes(answersCopy[i], q.options[j]));
+                    for (let o of q.options) {
+                        sortedAnswersCopy[i].answers.push(getVotes(answersCopy[i], o));
                     }
 
                 } else if (q.type == "checkbox") {
-                    for (let j = 0; j < q.options.length; j++) {
+                    for (let o of q.options) {
                         const arr = [...answersCopy[i]];
                         const flatArr = arr.flat(Infinity);
-                        sortedAnswersCopy[i].answers.push(getVotes(flatArr, q.options[j]));
+                        sortedAnswersCopy[i].answers.push(getVotes(flatArr, o));
 
                         /* const concattedArr = [];
 
@@ -115,7 +115,7 @@ function PollResults(props) {
                     </div>
                     <div>
                         {
-                            thePollResults ? thePollResults.map((q, i) => <ResultQuestion key={i} qna={q} />) : "loading... please wait"
+                            thePollResults ? thePollResults.map((q, i) => <ResultQuestion key={i} qna={q} poll={currentPoll} />) : "loading... please wait"
                         }
                     </div>
                     <button>
