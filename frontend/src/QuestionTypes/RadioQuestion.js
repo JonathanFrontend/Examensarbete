@@ -5,9 +5,9 @@ import { makeId } from '../blueprints/makeId';
 import { ANSWER_QUESTION, UPDATE_POLL } from '../texts';
 
 //index = question's index; i = options index.
-function RadioQuestion({ q, qIndex }) {
+function RadioQuestion({ q, qIndex, a }) {
     const dispatch = useDispatch();
-
+    const aq = useSelector(state => state.answeredQuestions);
     useEffect(() => {
         dispatch({
             type: ANSWER_QUESTION,
@@ -44,11 +44,26 @@ function RadioQuestion({ q, qIndex }) {
         // console.log("updatedQuestion", updatedQuestion);
     }
 
+    const isAnswered = (aq, o) => {
+        console.log("aq", aq.answer)
+        if (aq.answer === o) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     return (
         <div>
             {
                 q.options.map((o, i) => <div key={i}>
-                    <input type={"radio"} value={`${o}`} name={`${qIndex}`} id={makeId(qIndex, o, i)} onChange={(e) => onChange(e, i)} />
+                    <input
+                        type={"radio"}
+                        defaultChecked={aq[qIndex] ? isAnswered(aq[qIndex], o) : false}
+                        value={`${o}`}
+                        name={`${qIndex}`}
+                        id={makeId(qIndex, o, i)}
+                        onChange={(e) => onChange(e, i)} />
                     <label htmlFor={makeId(qIndex, o, i)}> {o} </label>
                 </div>)
             }

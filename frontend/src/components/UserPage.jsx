@@ -7,17 +7,33 @@ function UserPage(props) {
     const navigate = useNavigate();
     return (
         <main className='main'>
-            <h1>User page</h1>
-            <p>
-                {user && JSON.stringify(user.user)}
-            </p>
-            <button onClick={() => {
-                setUser(null);
-                localStorage.setItem("user", JSON.stringify(null));
-                navigate("/login");
-            }}>
-                Log out
-            </button>
+            <div className='user-box'>
+                <div className='box-1'>
+                    <h1>{user ? user.user.username : "User page"}</h1>
+                    <span>
+                        <button onClick={() => {
+                            navigate("/createPoll");
+                        }}>
+                            Create poll
+                        </button>
+                        <button onClick={() => {
+                            setUser(null);
+                            localStorage.setItem("user", JSON.stringify(null));
+                            navigate("/login");
+                        }}>
+                            Log out
+                        </button>
+                    </span>
+                </div>
+                <div>
+                    <p>
+                        {/* {user && JSON.stringify(user.user)} */}
+                        {console.log(user.user)}
+                    </p>
+                </div>
+                <div>
+                </div>
+            </div>
         </main>
     );
 }

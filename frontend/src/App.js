@@ -8,6 +8,7 @@ import UserPage from './components/UserPage';
 import LoginPage from './components/LoginPage';
 import PollPage from './components/PollPage';
 import PollResults from './components/PollResults';
+import CreatePoll from './components/CreatePoll';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" exact element={<StartPage />} />
           <Route path="/poll" element={<PollPage />} />
           <Route path="/pollresults/:id" element={<PollResults />} />
+          <Route path="/createPoll" element={<CreatePoll />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/user" element={<UserPage />} />
         </Routes>

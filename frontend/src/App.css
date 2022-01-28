@@ -81,8 +81,29 @@ body {
   padding-left: 20px;
   padding-right: 20px;
 }
+.user-box {
+  width: 100%;
+  max-width: 1500px;
+  margin: 20px;
+  background-color: #fff;
+  border-radius: 1rem;
+}
+  .user-box div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .user-box h1 {
+  }
+  .user-box button {
 
+  }
 .start-main {
+}
+
+.box-1 {
+
 }
 
 .section {
