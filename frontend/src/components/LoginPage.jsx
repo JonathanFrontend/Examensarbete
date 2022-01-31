@@ -17,7 +17,7 @@ function LoginPage(props) {
                 </div>
                 <div>
                     <label htmlFor='password'>Password: </label>
-                    <input type={"text"} id="password" onChange={(e) => setPasswordinput(e.target.value)} />
+                    <input type={"password"} id="password" onChange={(e) => setPasswordinput(e.target.value)} />
                 </div>
                 <p>
                     {/* {JSON.stringify(user)} */}

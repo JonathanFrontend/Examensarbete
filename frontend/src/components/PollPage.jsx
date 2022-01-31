@@ -34,7 +34,6 @@ function PollPage(props) {
                     author: user.user.id
                 }
             }),
-            // authorization: { token: user.jwt }
         }).then(r => r.json()).then(d => {
             console.log(d);
         }).catch(err => console.error(err));

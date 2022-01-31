@@ -13,7 +13,7 @@ function PollObject({ pollObject }) {
     const pollInfo = {
         id: pollObject.id,
         title: poll.title,
-        author: poll.users_permissions_user.data.attributes,
+        author: poll.author.data.attributes,
         description: poll.description,
         tags: poll.tags.data
     }
@@ -31,7 +31,7 @@ function PollObject({ pollObject }) {
             </div>
             <div>
                 <button onClick={(e) => navigate(`/pollresults/${pollInfo.id}`)}>
-                    Results (so far)
+                    {"Results (so far)"}
                 </button>
             </div>
         </div>

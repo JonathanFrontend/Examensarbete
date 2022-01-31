@@ -91,18 +91,24 @@ function CheckboxQuestion({ q, qIndex }) {
         <div>
             {
                 q.options.map((o, i) => <div key={i}>
-                    <input type={"checkbox"} value={`${o}`} className={`question-${qIndex}`} name={`${qIndex}`} id={makeId(qIndex, o, i)} onChange={(e, i) => {
-                        /* if (e.target.value !== NOTA) {
-                            setNotaChecked(false)
-                        }
-                        if (e.target.value === NOTA) {
-                            console.log("e.target.checked", e.target.checked)
-                            let d = document.querySelectorAll(`.question-${qIndex}`);
-                            console.log(d);
-                            setNotaChecked(e.target.checked)
-                        } */
-                        onChange(e, i);
-                    }} />
+                    <input
+                        type={"checkbox"}
+                        value={`${o}`}
+                        className={`question-${qIndex}`}
+                        name={`${qIndex}`}
+                        id={makeId(qIndex, o, i)}
+                        onChange={(e, i) => {
+                            /* if (e.target.value !== NOTA) {
+                                setNotaChecked(false)
+                            }
+                            if (e.target.value === NOTA) {
+                                console.log("e.target.checked", e.target.checked)
+                                let d = document.querySelectorAll(`.question-${qIndex}`);
+                                console.log(d);
+                                setNotaChecked(e.target.checked)
+                            } */
+                            onChange(e, i);
+                        }} />
                     <label htmlFor={makeId(qIndex, o, i)}> {o} </label>
                 </div>)
             }

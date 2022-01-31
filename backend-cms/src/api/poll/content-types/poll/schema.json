@@ -27,7 +27,7 @@
     "pollEndsAt": {
       "type": "date"
     },
-    "users_permissions_user": {
+    "author": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",

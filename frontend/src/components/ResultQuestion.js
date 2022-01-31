@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 function ResultQuestion({ qna, poll }) {
-    console.log("poll", poll)
+    console.log("poll", poll, qna)
     const [totalVotes, setTotalVotes] = useState(0);
     useEffect(() => {
         let newTotalVotes = 0;
@@ -19,8 +19,21 @@ function ResultQuestion({ qna, poll }) {
             <h4>{qna.question}</h4>
             <ul>
                 {qna.answers.map((a, i) => {
+                    let percent = (a.votes / totalVotes) * 100;
                     return <li key={i}>
                         <h5>{a.answer} - {a.votes} / {totalVotes}</h5>
+                        <div className='metercontainer'>
+                            <div className='barmeter'>
+                                <div
+                                    className='meter'
+                                    style={{ width: `${percent}%` }} />
+                            </div>
+                            <span className='percent'>
+                                {
+                                    `${Math.round(percent)}%`
+                                }
+                            </span>
+                        </div>
                     </li>
                 })}
             </ul>
