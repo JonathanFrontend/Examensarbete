@@ -5,15 +5,24 @@ import { UserContext } from '../contexts/UserContext';
 
 function CreatePoll(props) {
     const { user, setUser } = useContext(UserContext);
+
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
     const [questions, setQuestions] = useState([]);
     const [pollEndsAt, setPollEndsAt] = useState([]);
+
+    //Current question attributes
+    const [currentQuestion, setCurrentQuestion] = useState("");
+    const [currentQuestionType, setCurrentQuestionType] = useState("");
+    const [currentOptions, setCurrentOptions] = useState([]);
+
     console.log(user)
 
     function publishPoll() {
         fetch("http://localhost:1337/api/polls", {
             method: "POST",
             headers: {
-                "Content-type": "application/json; UTF-8",
+                "Content-type": "application/json; charset=UTF-8",
                 "Authorization": "Token " + user.jwt
             },
             body: JSON.stringify({
@@ -31,12 +40,15 @@ function CreatePoll(props) {
     function handleQuestion(event) {
         if (event.target.value === "radio" || event.target.value === "checkbox") {
 
-            // document.querySelector("#option-question").innerHTML = 
+            setCurrentOptions(["", ""]);
+        } else {
+            setCurrentOptions([]);
         }
     }
 
     return (
         <main className='main start-main'>
+            {console.log("currentOptions", currentOptions)}
             <section className='section start-section'>
                 <div className='section-div'>
                     <div>
@@ -51,7 +63,7 @@ function CreatePoll(props) {
                                     <h4>{q.question}</h4>
                                     <h5>{q.type}</h5>
                                     {
-                                        q.option && q.options.map((o, i) => <span key={i}>
+                                        q.option && q.options.map((o, j) => <span key={j}>
                                             {o}
                                         </span>)
                                     }
@@ -72,7 +84,7 @@ function CreatePoll(props) {
                                     id="radio"
                                     value="radio"
                                     name='question-type'
-                                    onChange={e => handleQuestion(e)} />
+                                    onChange={(e) => handleQuestion(e)} />
 
                                 <label htmlFor='checkbox'>Checkbox</label>
                                 <input
@@ -80,28 +92,53 @@ function CreatePoll(props) {
                                     id="checkbox"
                                     value="checkbox"
                                     name='question-type'
-                                    onChange={e => handleQuestion(e)} />
+                                    onChange={(e) => handleQuestion(e)} />
 
                                 <label htmlFor='text'>Text</label>
                                 <input
                                     type={"radio"}
                                     id="text"
                                     value="text"
-                                    name='question-type' />
+                                    name='question-type'
+                                    onChange={(e) => handleQuestion(e)} />
 
                                 <label htmlFor='rating'>Rating</label>
                                 <input
                                     type={"radio"}
                                     id="rating"
                                     value="rating"
-                                    name='question-type' />
+                                    name='question-type'
+                                    onChange={(e) => handleQuestion(e)} />
                             </div>
-                            <div id="option-question">
-
-                            </div>
+                            {
+                                currentOptions &&
+                                <div id="option-question">
+                                    {
+                                        currentOptions.map((o, i) => {
+                                            return <input
+                                                key={i}
+                                                type={"text"}
+                                                placeholder={`Option ${i + 1}`}
+                                                onChange={(e) => {
+                                                    const arr = [...currentOptions];
+                                                    arr[i] = e.target.value;
+                                                    console.log("arr", arr);
+                                                    setCurrentOptions(arr);
+                                                }} />
+                                        })
+                                    }
+                                    <button onClick={() => {
+                                        const arr = [...currentOptions];
+                                        arr.push("");
+                                        setCurrentOptions(arr);
+                                    }}>
+                                        Add option
+                                    </button>
+                                </div>
+                            }
                         </div>
                         <button>
-                            Add another question
+                            Add question
                         </button>
                     </div>
                     <button>
