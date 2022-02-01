@@ -168,3 +168,7 @@ body {
     .percent {
 
     }
+.X {
+  cursor: pointer;
+  color: rgb(209, 53, 26);
+}

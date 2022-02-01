@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useStore } from 'react-redux';
 import { UserContext } from '../contexts/UserContext';
 
@@ -6,6 +6,7 @@ import { UserContext } from '../contexts/UserContext';
 function CreatePoll(props) {
     const { user, setUser } = useContext(UserContext);
 
+    //Poll info
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [questions, setQuestions] = useState([]);
@@ -17,6 +18,10 @@ function CreatePoll(props) {
     const [currentOptions, setCurrentOptions] = useState([]);
 
     console.log(user)
+
+    useEffect(() => {
+
+    }, [questions])
 
     function publishPoll() {
         fetch("http://localhost:1337/api/polls", {
@@ -38,11 +43,12 @@ function CreatePoll(props) {
     }
 
     function handleQuestion(event) {
+        setCurrentQuestionType(event.target.value);
         if (event.target.value === "radio" || event.target.value === "checkbox") {
-
-            setCurrentOptions(["", ""]);
-        } else {
-            setCurrentOptions([]);
+            if (currentOptions.length === 0) {
+                console.log("CurrentOptions", currentOptions)
+                setCurrentOptions(["", ""]);
+            }
         }
     }
 
@@ -60,11 +66,12 @@ function CreatePoll(props) {
                         <div id='created-questions'>
                             {
                                 questions && questions.map((q, i) => <div key={i}>
+                                    {console.log("q", q)}
                                     <h4>{q.question}</h4>
                                     <h5>{q.type}</h5>
                                     {
-                                        q.option && q.options.map((o, j) => <span key={j}>
-                                            {o}
+                                        q.options && q.options.map((o, j) => <span key={j}>
+                                            {`${o} `}
                                         </span>)
                                     }
                                 </div>)
@@ -75,56 +82,74 @@ function CreatePoll(props) {
                                 <label htmlFor='question'>
                                     Question:
                                 </label>
-                                <input type={"text"} id='question' />
+                                <input type={"text"} value={currentQuestion} id='question' onChange={(e) => setCurrentQuestion(e.target.value)} />
                             </div>
                             <div>
-                                <label htmlFor='radio'>Radio</label>
                                 <input
                                     type={"radio"}
                                     id="radio"
                                     value="radio"
                                     name='question-type'
-                                    onChange={(e) => handleQuestion(e)} />
+                                    onChange={(e) => {
+                                        handleQuestion(e)
+                                    }} />
+                                <label htmlFor='radio'>Radio</label>
 
-                                <label htmlFor='checkbox'>Checkbox</label>
                                 <input
                                     type={"radio"}
                                     id="checkbox"
                                     value="checkbox"
                                     name='question-type'
-                                    onChange={(e) => handleQuestion(e)} />
+                                    onChange={(e) => {
+                                        handleQuestion(e)
+                                    }} />
+                                <label htmlFor='checkbox'>Checkbox</label>
 
-                                <label htmlFor='text'>Text</label>
                                 <input
                                     type={"radio"}
                                     id="text"
                                     value="text"
                                     name='question-type'
-                                    onChange={(e) => handleQuestion(e)} />
+                                    onChange={(e) => {
+                                        handleQuestion(e)
+                                    }} />
+                                <label htmlFor='text'>Text</label>
 
-                                <label htmlFor='rating'>Rating</label>
                                 <input
                                     type={"radio"}
                                     id="rating"
                                     value="rating"
                                     name='question-type'
-                                    onChange={(e) => handleQuestion(e)} />
+                                    onChange={(e) => {
+                                        handleQuestion(e)
+                                    }} />
+                                <label htmlFor='rating'>Rating</label>
                             </div>
                             {
-                                currentOptions &&
+                                (currentQuestionType === "radio" || currentQuestionType === "checkbox") &&
                                 <div id="option-question">
                                     {
                                         currentOptions.map((o, i) => {
-                                            return <input
-                                                key={i}
-                                                type={"text"}
-                                                placeholder={`Option ${i + 1}`}
-                                                onChange={(e) => {
-                                                    const arr = [...currentOptions];
-                                                    arr[i] = e.target.value;
-                                                    console.log("arr", arr);
-                                                    setCurrentOptions(arr);
-                                                }} />
+                                            return <span key={i}>
+                                                <input
+                                                    type={"text"}
+                                                    placeholder={`Option ${i + 1}`}
+                                                    value={o}
+                                                    onChange={(e) => {
+                                                        const arr = [...currentOptions];
+                                                        arr[i] = e.target.value;
+                                                        setCurrentOptions(arr);
+                                                    }} />
+                                                <span
+                                                    className='X'
+                                                    onClick={(e) => {
+                                                        const arr = [...currentOptions];
+                                                        arr.splice(i, 1);
+                                                        setCurrentOptions(arr);
+                                                    }}>
+                                                    X
+                                                </span>
+                                            </span>
                                         })
                                     }
                                     <button onClick={() => {
@@ -137,7 +162,21 @@ function CreatePoll(props) {
                                 </div>
                             }
                         </div>
-                        <button>
+                        <button onClick={() => {
+                            const questionObj = {
+                                question: currentQuestion,
+                                type: currentQuestionType,
+                                options: (currentQuestionType === "radio" || currentQuestionType === "checkbox") && currentOptions
+                            }
+                            let arr = [...questions];
+                            arr.push(questionObj);
+                            setQuestions(arr);
+                            console.log(questionObj);
+                            console.log(arr);
+                            setCurrentQuestion("");
+                            setCurrentQuestionType("");
+                            setCurrentOptions([]);
+                        }}>
                             Add question
                         </button>
                     </div>
