@@ -147,6 +147,7 @@ body {
   cursor: pointer;
 }
 
+/*Results*/
 .metercontainer{
   width: 100%;
   display: flex;
@@ -168,6 +169,16 @@ body {
     .percent {
 
     }
+
+/*Create*/
+#created-questions div{
+  border-bottom: .5px solid rgba(0,0,0,0.4);
+  padding-top: 1rem;
+}
+#make-question {
+  padding-top: 1rem;
+}
+
 .X {
   cursor: pointer;
   color: rgb(209, 53, 26);

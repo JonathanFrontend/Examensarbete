@@ -6,20 +6,19 @@ import { UserContext } from '../contexts/UserContext';
 
 function CreatePoll(props) {
     const { user, setUser } = useContext(UserContext);
+    const userObj = user || JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
 
     //Poll info
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [questions, setQuestions] = useState([]);
-    const [pollEndsAt, setPollEndsAt] = useState([]);
+    const [pollEndsAt, setPollEndsAt] = useState("");
 
     //Current question attributes
     const [currentQuestion, setCurrentQuestion] = useState("");
     const [currentQuestionType, setCurrentQuestionType] = useState("");
     const [currentOptions, setCurrentOptions] = useState([]);
-
-    console.log(user)
 
     useEffect(() => {
 
@@ -30,19 +29,28 @@ function CreatePoll(props) {
             method: "POST",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
-                "Authorization": "Token " + user.jwt
+                "Authorization": "Token " + userObj.jwt
             },
             body: JSON.stringify({
                 data: {
-                    title: "",
-                    description: "",
+                    title: title,
+                    description: description,
                     questions: questions,
-                    pollEndsAt: "",
-                    author: user.user.id,
+                    pollEndsAt: pollEndsAt,
+                    author: userObj.user.id,
+                    answered_polls: 6, // !
+                    tags: 3 // !
                 }
             })
         }).then(r => r.json()).then(d => {
             console.log(d);
+            console.log("data ", {
+                title: title,
+                description: description,
+                questions: questions,
+                pollEndsAt: pollEndsAt,
+                author: userObj.user.id,
+            });
             navigate("/")
         }).catch(err => console.log(err));
     }
@@ -51,7 +59,6 @@ function CreatePoll(props) {
         setCurrentQuestionType(event.target.value);
         if (event.target.value === "radio" || event.target.value === "checkbox") {
             if (currentOptions.length === 0) {
-                console.log("CurrentOptions", currentOptions)
                 setCurrentOptions(["", ""]);
             }
         }
@@ -59,7 +66,6 @@ function CreatePoll(props) {
 
     return (
         <main className='main start-main'>
-            {console.log("currentOptions", currentOptions)}
             <section className='section start-section'>
                 <div className='section-div'>
                     <div>
@@ -68,10 +74,23 @@ function CreatePoll(props) {
                         </h1>
                     </div>
                     <div id="create-poll">
+                        <div className="create-top">
+                            <div>
+                                <label htmlFor='new-poll-title'>
+                                    Title:
+                                </label>
+                                <input type={"text"} id='new-poll-title' onChange={(e) => setTitle(e.target.value)} />
+                            </div>
+                            <div>
+                                <label htmlFor='new-poll-desc'>
+                                    Description:
+                                </label>
+                                <input type={"text"} id='new-poll-desc' onChange={(e) => setDescription(e.target.value)} />
+                            </div>
+                        </div>
                         <div id='created-questions'>
                             {
                                 questions && questions.map((q, i) => <div key={i}>
-                                    {console.log("q", q)}
                                     <h4>{q.question}</h4>
                                     <h5>{q.type}</h5>
                                     {
@@ -92,6 +111,7 @@ function CreatePoll(props) {
                             <div>
                                 <input
                                     type={"radio"}
+                                    defaultChecked={false}
                                     id="radio"
                                     value="radio"
                                     name='question-type'
@@ -102,6 +122,7 @@ function CreatePoll(props) {
 
                                 <input
                                     type={"radio"}
+                                    defaultChecked={false}
                                     id="checkbox"
                                     value="checkbox"
                                     name='question-type'
@@ -112,6 +133,7 @@ function CreatePoll(props) {
 
                                 <input
                                     type={"radio"}
+                                    defaultChecked={false}
                                     id="text"
                                     value="text"
                                     name='question-type'
@@ -122,6 +144,7 @@ function CreatePoll(props) {
 
                                 <input
                                     type={"radio"}
+                                    defaultChecked={false}
                                     id="rating"
                                     value="rating"
                                     name='question-type'
@@ -134,7 +157,7 @@ function CreatePoll(props) {
                                 (currentQuestionType === "radio" || currentQuestionType === "checkbox") &&
                                 <div id="option-question">
                                     {
-                                        currentOptions.map((o, i) => {
+                                        currentOptions && currentOptions.map((o, i) => {
                                             return <span key={i}>
                                                 <input
                                                     type={"text"}
@@ -144,6 +167,11 @@ function CreatePoll(props) {
                                                         const arr = [...currentOptions];
                                                         arr[i] = e.target.value;
                                                         setCurrentOptions(arr);
+                                                        /* if (e.target.value.replace(/\s/g, '')) {
+                                                            const arr = [...currentOptions];
+                                                            arr[i] = e.target.value;
+                                                            setCurrentOptions(arr);
+                                                        } */
                                                     }} />
                                                 <span
                                                     className='X'
@@ -171,16 +199,15 @@ function CreatePoll(props) {
                         </div>
                         <button onClick={() => {
                             let cond1 = (
-                                currentQuestion !== "" &&
                                 currentQuestion.replace(/\s/g, '').length !== 0 &&
-                                currentQuestionType !== "" &&
                                 currentQuestionType.replace(/\s/g, '').length !== 0
                             );
 
                             let cond2 = (currentQuestionType === "radio" || currentQuestionType === "checkbox")
-                                ? (currentOptions)
+                                ? !currentOptions.some(e => e.replace(/\s/g, '').length === 0)
                                 : true;
-                            if (cond1) {
+
+                            if (cond1 && cond2) {
                                 const questionObj = {
                                     question: currentQuestion,
                                     type: currentQuestionType,
@@ -189,17 +216,15 @@ function CreatePoll(props) {
                                 let arr = [...questions];
                                 arr.push(questionObj);
                                 setQuestions(arr);
-                                console.log(questionObj);
-                                console.log(arr);
                                 setCurrentQuestion("");
-                                setCurrentQuestionType("");
-                                setCurrentOptions([]);
+                                //setCurrentQuestionType("radio");
+                                setCurrentOptions(["", ""])
                             }
                         }}>
                             Add question
                         </button>
                     </div>
-                    <button>
+                    <button onClick={() => publishPoll()}>
                         Publish
                     </button>
                 </div>
