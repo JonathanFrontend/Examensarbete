@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useStore } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 
 
 function CreatePoll(props) {
     const { user, setUser } = useContext(UserContext);
+    const navigate = useNavigate();
 
     //Poll info
     const [title, setTitle] = useState("");
@@ -39,7 +41,10 @@ function CreatePoll(props) {
                     author: user.user.id,
                 }
             })
-        }).then(r => r.json()).then(d => console.log(d)).catch(err => console.log(err));
+        }).then(r => r.json()).then(d => {
+            console.log(d);
+            navigate("/")
+        }).catch(err => console.log(err));
     }
 
     function handleQuestion(event) {
@@ -145,7 +150,9 @@ function CreatePoll(props) {
                                                     onClick={(e) => {
                                                         const arr = [...currentOptions];
                                                         arr.splice(i, 1);
-                                                        setCurrentOptions(arr);
+                                                        if (!(arr.length < 2)) {
+                                                            setCurrentOptions(arr);
+                                                        }
                                                     }}>
                                                     X
                                                 </span>
@@ -163,19 +170,31 @@ function CreatePoll(props) {
                             }
                         </div>
                         <button onClick={() => {
-                            const questionObj = {
-                                question: currentQuestion,
-                                type: currentQuestionType,
-                                options: (currentQuestionType === "radio" || currentQuestionType === "checkbox") && currentOptions
+                            let cond1 = (
+                                currentQuestion !== "" &&
+                                currentQuestion.replace(/\s/g, '').length !== 0 &&
+                                currentQuestionType !== "" &&
+                                currentQuestionType.replace(/\s/g, '').length !== 0
+                            );
+
+                            let cond2 = (currentQuestionType === "radio" || currentQuestionType === "checkbox")
+                                ? (currentOptions)
+                                : true;
+                            if (cond1) {
+                                const questionObj = {
+                                    question: currentQuestion,
+                                    type: currentQuestionType,
+                                    options: (currentQuestionType === "radio" || currentQuestionType === "checkbox") ? currentOptions : []
+                                }
+                                let arr = [...questions];
+                                arr.push(questionObj);
+                                setQuestions(arr);
+                                console.log(questionObj);
+                                console.log(arr);
+                                setCurrentQuestion("");
+                                setCurrentQuestionType("");
+                                setCurrentOptions([]);
                             }
-                            let arr = [...questions];
-                            arr.push(questionObj);
-                            setQuestions(arr);
-                            console.log(questionObj);
-                            console.log(arr);
-                            setCurrentQuestion("");
-                            setCurrentQuestionType("");
-                            setCurrentOptions([]);
                         }}>
                             Add question
                         </button>
