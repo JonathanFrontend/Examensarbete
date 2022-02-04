@@ -14,6 +14,7 @@ function CreatePoll(props) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [pollTags, setPollTags] = useState([]);
+    const [pollTagIds, setPollTagIds] = useState([]);
     const [questions, setQuestions] = useState([]);
     const [pollEndsAt, setPollEndsAt] = useState("");
 
@@ -67,7 +68,7 @@ function CreatePoll(props) {
                     questions: questions,
                     pollEndsAt: pollEndsAt,
                     answered_polls: [],
-                    tags: []
+                    tags: pollTagIds
                 }
             })
         }).then(r => r.json()).then(d => {
@@ -109,29 +110,32 @@ function CreatePoll(props) {
                                         <ul>
                                             {
                                                 pollTags.map((tag, i) => <li key={i}>
-                                                    {tag}
+                                                    {tag.attributes.name}
                                                 </li>)
                                             }
                                         </ul>
                                     </div>
                                     <input type={"text"} list='tag-list' onChange={(e) => {
-                                        let pollTagArr = [...pollTags];
+
+                                        let pollTagsArr = [...pollTags];
                                         let tagArr = [...tags.data.data];
 
-
-                                        let findTag = tagArr.find(t => {
-                                            console.log("t", t)
-                                            return t === e.target.value;
+                                        let findTag = [...tagArr].find(t => {
+                                            // console.log("t", t)
+                                            return t.attributes.name === e.target.value;
                                         });
 
-                                        console.log("findTag", findTag);
-                                        //arr.push(tag.id);
+                                        // console.log("findTag", findTag);
+                                        findTag && pollTagsArr.push(findTag);
 
-                                        let arrRemoveDuplicates = pollTagArr.filter((t, index) => {
-                                            return pollTagArr.indexOf(t) === index;
+                                        let arrRemoveDuplicates = pollTagsArr.filter((t, index) => {
+                                            return pollTagsArr.indexOf(t) === index;
                                         });
 
-                                        console.log("arrRemoveDuplicates", arrRemoveDuplicates)
+                                        let tagArray = arrRemoveDuplicates.map(i => i.id);
+
+                                        setPollTags(arrRemoveDuplicates);
+                                        setPollTagIds(tagArray);
                                     }} />
                                     <datalist id='tag-list'>
                                         {
