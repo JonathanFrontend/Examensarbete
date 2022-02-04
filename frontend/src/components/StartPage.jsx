@@ -6,7 +6,7 @@ import useFetch from '../hooks/useFetch';
 import PollObject from './PollObject';
 
 function StartPage() {
-    const { loading, error, data } = useFetch("http://localhost:1337/api/polls?populate=*");
+    // const { loading, error, data } = useFetch("http://localhost:1337/api/polls?populate=*");
     const pollInfo = useSelector(state => state.pollInfo);
     const pollQuestions = useSelector(state => state.pollQuestions);
     const [polls, setPolls] = useState([]);

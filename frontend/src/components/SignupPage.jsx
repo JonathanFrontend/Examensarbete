@@ -35,22 +35,20 @@ function LoginPage(props) {
                         password: passwordinput
                     }));
 
-                    fetch("http://localhost:1337/api/users", {
+                    fetch("http://localhost:1337/api/auth/local/register", {
                         method: "POST",
                         headers: { "Content-type": "application/json; charset=UTF-8" },
                         body: JSON.stringify({
-                            data: {
-                                username: usernameinput,
-                                password: passwordinput,
-                                email: emailinput,
-                                confirmed: true,
-                                answered_polls: [],
-                                polls: []
-                            }
+                            username: usernameinput,
+                            password: passwordinput,
+                            email: emailinput
                         })
-                    }).then(r => r.json()).then(d => {
-                        console.log("d", d)
-                        //navigate('/login')
+                    }).then(r => r.json()).then(userData => {
+                        if (userData) {
+                            setUser(userData);
+                            localStorage.setItem("user", JSON.stringify(userData));
+                            navigate('/');
+                        }
                     }).catch(err => console.error(err));
 
                 }}>Sign up</button>

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useStore } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
+import useFetch from '../hooks/useFetch';
 
 
 function CreatePoll(props) {
@@ -12,6 +13,7 @@ function CreatePoll(props) {
     //Poll info
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
+    const [pollTags, setPollTags] = useState([]);
     const [questions, setQuestions] = useState([]);
     const [pollEndsAt, setPollEndsAt] = useState("");
 
@@ -20,8 +22,10 @@ function CreatePoll(props) {
     const [currentQuestionType, setCurrentQuestionType] = useState("");
     const [currentOptions, setCurrentOptions] = useState([]);
 
+    const tags = useFetch("http://localhost:1337/api/tags");
+    console.log(tags)
     function publishPoll() {
-        console.log("user", user);
+        /* console.log("user", user);
         console.log("user", JSON.stringify({
             data: {
                 title: title,
@@ -32,7 +36,7 @@ function CreatePoll(props) {
                 answered_polls: [],
                 tags: []
             }
-        }));
+        })); */
 
         /*
 
@@ -47,7 +51,7 @@ function CreatePoll(props) {
                 }
                 
          */
-        console.log("user", user)
+        // console.log("user", user)
         fetch("http://localhost:1337/api/polls", {
             method: "POST",
             mode: "cors",
@@ -63,7 +67,7 @@ function CreatePoll(props) {
                     questions: questions,
                     pollEndsAt: pollEndsAt,
                     answered_polls: [],
-                    tags: [1, 2]
+                    tags: []
                 }
             })
         }).then(r => r.json()).then(d => {
@@ -92,11 +96,57 @@ function CreatePoll(props) {
                     </div>
                     <div id="create-poll">
                         <div className="create-top">
-                            <div>
-                                <label htmlFor='new-poll-title'>
-                                    Title:
-                                </label>
-                                <input type={"text"} id='new-poll-title' onChange={(e) => setTitle(e.target.value)} />
+                            <div className='box-1'>
+                                <div>
+                                    <label htmlFor='new-poll-title'>
+                                        Title:
+                                    </label>
+                                    <input type={"text"} id='new-poll-title' onChange={(e) => setTitle(e.target.value)} />
+                                </div>
+                                <div>
+                                    <label htmlFor="tag-list">Tags: </label>
+                                    <div>
+                                        <ul>
+                                            {
+                                                pollTags.map((tag, i) => <li key={i}>
+                                                    {tag}
+                                                </li>)
+                                            }
+                                        </ul>
+                                    </div>
+                                    <input type={"text"} list='tag-list' onChange={(e) => {
+                                        let pollTagArr = [...pollTags];
+                                        let tagArr = [...tags.data.data];
+
+
+                                        let findTag = tagArr.find(t => {
+                                            console.log("t", t)
+                                            return t === e.target.value;
+                                        });
+
+                                        console.log("findTag", findTag);
+                                        //arr.push(tag.id);
+
+                                        let arrRemoveDuplicates = pollTagArr.filter((t, index) => {
+                                            return pollTagArr.indexOf(t) === index;
+                                        });
+
+                                        console.log("arrRemoveDuplicates", arrRemoveDuplicates)
+                                    }} />
+                                    <datalist id='tag-list'>
+                                        {
+                                            (!tags.loading && !tags.error)
+                                                ? tags.data.data.map((tag, i) => {
+                                                    return (
+                                                        <option key={i} value={tag.attributes.name}>
+                                                            {tag.attributes.name}
+                                                        </option>
+                                                    )
+                                                }
+                                                ) : ""
+                                        }
+                                    </datalist>
+                                </div>
                             </div>
                             <div>
                                 <label htmlFor='new-poll-desc'>
