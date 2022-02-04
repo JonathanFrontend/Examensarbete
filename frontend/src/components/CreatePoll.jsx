@@ -20,38 +20,55 @@ function CreatePoll(props) {
     const [currentQuestionType, setCurrentQuestionType] = useState("");
     const [currentOptions, setCurrentOptions] = useState([]);
 
-    useEffect(() => {
-
-    }, [questions])
-
     function publishPoll() {
+        console.log("user", user);
+        console.log("user", JSON.stringify({
+            data: {
+                title: title,
+                description: description,
+                questions: questions,
+                pollEndsAt: pollEndsAt,
+                author: user.user.id,
+                answered_polls: [],
+                tags: []
+            }
+        }));
+
+        /*
+
+         data: {
+                    title: title,
+                    description: description,
+                    questions: questions,
+                    pollEndsAt: pollEndsAt,
+                    author: user.user.id,
+                    answered_polls: [],
+                    tags: []
+                }
+                
+         */
+        console.log("user", user)
         fetch("http://localhost:1337/api/polls", {
             method: "POST",
+            mode: "cors",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
-                "Authorization": "Token " + userObj.jwt
+                "Authorization": "Bearer " + user.jwt
             },
             body: JSON.stringify({
                 data: {
                     title: title,
                     description: description,
+                    author: user.user.id,
                     questions: questions,
                     pollEndsAt: pollEndsAt,
-                    author: userObj.user.id,
-                    answered_polls: 6, // !
-                    tags: 3 // !
+                    answered_polls: [],
+                    tags: [1, 2]
                 }
             })
         }).then(r => r.json()).then(d => {
-            console.log(d);
-            console.log("data ", {
-                title: title,
-                description: description,
-                questions: questions,
-                pollEndsAt: pollEndsAt,
-                author: userObj.user.id,
-            });
-            navigate("/")
+            console.log("d", d);
+            // navigate("/");
         }).catch(err => console.log(err));
     }
 
@@ -86,6 +103,10 @@ function CreatePoll(props) {
                                     Description:
                                 </label>
                                 <input type={"text"} id='new-poll-desc' onChange={(e) => setDescription(e.target.value)} />
+                            </div>
+                            <div>
+                                <label htmlFor="end-date">Expire date: </label>
+                                <input type={"date"} onChange={(e) => setPollEndsAt(e.target.value)} />
                             </div>
                         </div>
                         <div id='created-questions'>

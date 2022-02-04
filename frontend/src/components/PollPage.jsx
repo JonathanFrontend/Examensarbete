@@ -23,9 +23,10 @@ function PollPage(props) {
 
         fetch("http://localhost:1337/api/answered-polls", {
             method: "POST",
+            mode: "cors",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
-                "Authorization": "Token " + user.jwt
+                "Authorization": "Bearer " + user.jwt
             },
             body: JSON.stringify({
                 data: {

@@ -9,7 +9,7 @@ function UserPage(props) {
         <main className='main'>
             <div className='user-box'>
                 <div className='box-1'>
-                    <h1>{user ? user.user.username : "User page"}</h1>
+                    <h1>{user.user ? user.user.username : "User page"}</h1>
                     <span>
                         <button onClick={() => {
                             navigate("/createPoll");
