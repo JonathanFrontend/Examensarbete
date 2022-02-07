@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import polls from "../json/polls.json"
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,6 +19,13 @@ function PollPage(props) {
     const dispatch = useDispatch();
     console.log("state", state);
     console.log("answeredQuestions", answeredQuestions);
+
+    useEffect(() => {
+        if (pollInfo.id === localStorage.getItem("pollInfo").id) {
+
+        }
+    }, [])
+
     function submitPoll() {
 
         fetch("http://localhost:1337/api/answered-polls", {

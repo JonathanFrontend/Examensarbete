@@ -8,17 +8,20 @@ import { ANSWER_QUESTION, UPDATE_POLL } from '../texts';
 function RadioQuestion({ q, qIndex, a }) {
     const dispatch = useDispatch();
     const aq = useSelector(state => state.answeredQuestions);
+
     useEffect(() => {
-        dispatch({
-            type: ANSWER_QUESTION,
-            payload: {
-                typeOfQuestion: "radio",
-                answer: "",
-                indexOfQuestion: qIndex,
-                question: q.question,
-                indexOfPickedOption: undefined,
-            }
-        });
+        if (!aq[qIndex].answer) {
+            dispatch({
+                type: ANSWER_QUESTION,
+                payload: {
+                    typeOfQuestion: "radio",
+                    answer: "",
+                    indexOfQuestion: qIndex,
+                    question: q.question,
+                    indexOfPickedOption: undefined,
+                }
+            });
+        }
     }, []);
 
     const onChange = (e, oIndex) => {
@@ -45,7 +48,6 @@ function RadioQuestion({ q, qIndex, a }) {
     }
 
     const isAnswered = (aq, o) => {
-        console.log("aq", aq.answer)
         if (aq.answer === o) {
             return true;
         } else {

@@ -7,17 +7,22 @@ import { ANSWER_QUESTION, UPDATE_POLL, NOTA } from '../texts';
 //index = question's index; i = options index.
 
 function CheckboxQuestion({ q, qIndex }) {
+    const state = useSelector(state => state);
+    const answeredQuestions = useSelector(state => state.answeredQuestions);
+
     const [payload, setPayload] = useState({});
-    const [answerArr, setAnswerArr] = useState([]);
+    const [answerArr, setAnswerArr] = useState((answeredQuestions[qIndex].answer.length > 0) ? answeredQuestions[qIndex].answer : []);
     const [notaChecked, setNotaChecked] = useState(false);
     const firstRender = useRef(false);
     const dispatch = useDispatch();
 
-    const state = useSelector(state => state);
     // console.log("state", state)
 
     useEffect(() => {
-        if (firstRender.current) {
+        console.log("answerArr", answerArr);
+        console.log("answeredQuestions", answeredQuestions);
+        console.log("firstRender.current", firstRender.current);
+        if (answerArr) {
 
             dispatch({
                 type: ANSWER_QUESTION,
@@ -95,6 +100,7 @@ function CheckboxQuestion({ q, qIndex }) {
                         type={"checkbox"}
                         value={`${o}`}
                         className={`question-${qIndex}`}
+                        defaultChecked={(answeredQuestions[qIndex].answer.find(qo => qo === o)) ? true : false}
                         name={`${qIndex}`}
                         id={makeId(qIndex, o, i)}
                         onChange={(e, i) => {
