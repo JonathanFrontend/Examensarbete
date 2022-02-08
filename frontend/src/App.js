@@ -13,7 +13,7 @@ import SignupPage from './components/SignupPage';
 import ErrorPage from './components/ErrorPage';
 
 function App() {
-  const [user, setUser] = useState(localStorage.getItem("user") || null);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
 
   const userValue = useMemo(() => ({ user, setUser }), [user, setUser]);
 

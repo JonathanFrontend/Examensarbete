@@ -1,25 +1,20 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { Answer } from '../blueprints/Answer';
+import AnswerObj from '../blueprints/AnswerClass';
 import { makeId } from '../blueprints/makeId';
 import { ANSWER_QUESTION, UPDATE_POLL } from '../texts';
 
 //index = question's index; i = options index.
-function RadioQuestion({ q, qIndex, a }) {
+function RadioQuestion({ q, qIndex }) {
     const dispatch = useDispatch();
     const aq = useSelector(state => state.answeredQuestions);
 
     useEffect(() => {
         if (!aq[qIndex].answer) {
+            const answer = new AnswerObj(q.question, "", "radio", qIndex);
             dispatch({
                 type: ANSWER_QUESTION,
-                payload: {
-                    typeOfQuestion: "radio",
-                    answer: "",
-                    indexOfQuestion: qIndex,
-                    question: q.question,
-                    indexOfPickedOption: undefined,
-                }
+                payload: answer
             });
         }
     }, []);
@@ -28,16 +23,12 @@ function RadioQuestion({ q, qIndex, a }) {
 
         // const answer = new Answer(e.target.value, q.question, e.target.type, qIndex);
         // console.log("answer", answer);
+        const answer = new AnswerObj(q.question, e.target.value, "radio", qIndex);
+        console.log("answer", answer);
 
         dispatch({
             type: ANSWER_QUESTION,
-            payload: {
-                typeOfQuestion: "radio",
-                answer: e.target.value,
-                indexOfQuestion: qIndex,
-                question: q.question,
-                indexOfPickedOption: oIndex,
-            }
+            payload: answer
         });
         // console.log("poll", poll)
 

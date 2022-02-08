@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { Answer } from '../blueprints/Answer';
+import AnswerObj from '../blueprints/AnswerClass';
 import { makeId } from '../blueprints/makeId';
 import { ANSWER_QUESTION, UPDATE_POLL } from '../texts';
 
@@ -10,21 +10,23 @@ function RatingQuestion({ q, qIndex }) {
 
     const radioOnChange = (e, oIndex) => {
 
-        const answer = new Answer(e.target.value, q.question, e.target.type, qIndex);
-        // console.log("answer", answer);
+        const answer = new AnswerObj(q.question, e.target.value, "radio", qIndex);
+        console.log("answer", answer);
 
         dispatch({
             type: ANSWER_QUESTION,
-            payload: {
-                answer: e.target.value,
-                indexOfQuestion: qIndex,
-                typeOfQuestion: "radio",
-                question: q.question,
-                indexOfPickedOption: oIndex,
-            }
+            payload: answer
         });
         // console.log("poll", poll)
-
+        /* 
+        {
+            answer: e.target.value,
+            indexOfQuestion: qIndex,
+            typeOfQuestion: "radio",
+            question: q.question,
+            indexOfPickedOption: oIndex,
+        }
+        */
         // const updatedPoll = poll.questions[qIndex];
         // const updatedQuestion = updatedPoll.type.options[oIndex];
         // dispatch({ type: UPDATE_POLL, payload: { ...state, poll: {...poll, } } });

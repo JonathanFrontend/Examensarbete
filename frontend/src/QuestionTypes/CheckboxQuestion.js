@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-import { Answer } from '../blueprints/Answer';
+import AnswerObj from '../blueprints/AnswerClass';
 import { makeId } from '../blueprints/makeId';
 import { ANSWER_QUESTION, UPDATE_POLL, NOTA } from '../texts';
 
@@ -11,7 +11,7 @@ function CheckboxQuestion({ q, qIndex }) {
     const answeredQuestions = useSelector(state => state.answeredQuestions);
 
     const [payload, setPayload] = useState({});
-    const [answerArr, setAnswerArr] = useState((answeredQuestions[qIndex].answer.length > 0) ? answeredQuestions[qIndex].answer : []);
+    const [answerArr, setAnswerArr] = useState((answeredQuestions[qIndex].answer && answeredQuestions[qIndex].answer.length > 0) ? answeredQuestions[qIndex].answer : []);
     const [notaChecked, setNotaChecked] = useState(false);
     const firstRender = useRef(false);
     const dispatch = useDispatch();
@@ -22,28 +22,17 @@ function CheckboxQuestion({ q, qIndex }) {
         console.log("answerArr", answerArr);
         console.log("answeredQuestions", answeredQuestions);
         console.log("firstRender.current", firstRender.current);
+        const answer = new AnswerObj(q.question, answerArr, "checkbox", qIndex);
+        console.log("answer from Class", answer);
         if (answerArr) {
-
             dispatch({
                 type: ANSWER_QUESTION,
-                payload: {
-                    typeOfQuestion: "checkbox",
-                    answer: answerArr,
-                    indexOfQuestion: qIndex,
-                    question: q.question,
-                    //indexOfPickedOption: i,
-                }
+                payload: answer
             });
         } else {
             dispatch({
                 type: ANSWER_QUESTION,
-                payload: {
-                    typeOfQuestion: "checkbox",
-                    answer: [],
-                    indexOfQuestion: qIndex,
-                    question: q.question,
-                    //indexOfPickedOption: i,
-                }
+                payload: { ...answer, answer: [] }
             });
             firstRender.current = true;
         }

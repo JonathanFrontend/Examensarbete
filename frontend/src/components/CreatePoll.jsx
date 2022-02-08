@@ -26,33 +26,6 @@ function CreatePoll(props) {
     const tags = useFetch("http://localhost:1337/api/tags");
     console.log(tags)
     function publishPoll() {
-        /* console.log("user", user);
-        console.log("user", JSON.stringify({
-            data: {
-                title: title,
-                description: description,
-                questions: questions,
-                pollEndsAt: pollEndsAt,
-                author: user.user.id,
-                answered_polls: [],
-                tags: []
-            }
-        })); */
-
-        /*
-
-         data: {
-                    title: title,
-                    description: description,
-                    questions: questions,
-                    pollEndsAt: pollEndsAt,
-                    author: user.user.id,
-                    answered_polls: [],
-                    tags: []
-                }
-                
-         */
-        // console.log("user", user)
         fetch("http://localhost:1337/api/polls", {
             method: "POST",
             mode: "cors",

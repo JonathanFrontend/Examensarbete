@@ -20,14 +20,8 @@ function PollPage(props) {
     console.log("state", state);
     console.log("answeredQuestions", answeredQuestions);
 
-    useEffect(() => {
-        if (pollInfo.id === localStorage.getItem("pollInfo").id) {
-
-        }
-    }, [])
-
     function submitPoll() {
-
+        console.log("user", user)
         fetch("http://localhost:1337/api/answered-polls", {
             method: "POST",
             mode: "cors",
@@ -49,29 +43,56 @@ function PollPage(props) {
         dispatch({ type: RESET });
         navigate("/");
     }
-    return (
-        <main className='main start-main'>
-            <section className='section start-section'>
-                <div className='section-div'>
-                    <div>
-                        <h1>
+    if (user) {
+        return (
+            <main className='main start-main'>
+                <section className='section start-section'>
+                    <div className='section-div'>
+                        <div>
+                            <h1>
+                                {
+                                    pollInfo.title
+                                }
+                            </h1>
+                        </div>
+                        <div>
                             {
-                                pollInfo.title
+                                pollQuestions.map((q, i) => <Question key={i} index={i} question={q} />)
                             }
-                        </h1>
+                        </div>
+                        <button onClick={submitPoll}>
+                            Submit
+                        </button>
                     </div>
-                    <div>
-                        {
-                            pollQuestions.map((q, i) => <Question key={i} index={i} question={q} />)
-                        }
+                </section>
+            </main>
+        );
+    }
+    else {
+        return (
+            <main className='main start-main'>
+                <section className='section start-section'>
+                    <div className='section-div'>
+                        <div>
+                            <h1>
+                                {
+                                    pollInfo.title
+                                }
+                            </h1>
+                        </div>
+                        <div>
+                            <h2>
+                                You need to be logged in to answer polls.
+                            </h2>
+                        </div>
+                        <button onClick={() => navigate('/login')}>
+                            Login
+                        </button>
                     </div>
-                    <button onClick={submitPoll}>
-                        Submit
-                    </button>
-                </div>
-            </section>
-        </main>
-    );
+                </section>
+            </main>
+        );
+    }
 }
 
 export default PollPage;
