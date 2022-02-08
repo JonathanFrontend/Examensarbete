@@ -10,12 +10,12 @@ function RatingQuestion({ q, qIndex }) {
 
     const radioOnChange = (e, oIndex) => {
 
-        const answer = new AnswerObj(q.question, e.target.value, "radio", qIndex);
+        const answer = new AnswerObj(q.question, e.target.value, "rating", qIndex);
         console.log("answer", answer);
 
         dispatch({
             type: ANSWER_QUESTION,
-            payload: answer
+            payload: { ...answer }
         });
         // console.log("poll", poll)
         /* 
@@ -35,11 +35,25 @@ function RatingQuestion({ q, qIndex }) {
 
     return (
         <div>
+            <input type={"radio"} name={`${qIndex}`} className='star-rating' value={1} id='1' />
+            <label htmlFor={'1'}> * </label>
+
+            <input type={"radio"} name={`${qIndex}`} className='star-rating' value={2} id='2' />
+            <label htmlFor={'2'}> * </label>
+
+            <input type={"radio"} name={`${qIndex}`} className='star-rating' value={3} id='3' />
+            <label htmlFor={'3'}> * </label>
+
+            <input type={"radio"} name={`${qIndex}`} className='star-rating' value={4} id='4' />
+            <label htmlFor={'4'}> * </label>
+
+            <input type={"radio"} name={`${qIndex}`} className='star-rating' value={5} id='5' />
+            <label htmlFor={'5'}> * </label>
             {
-                q.options.map((o, i) => <div key={i}>
-                    <input type={"radio"} value={`${o}`} name={`${qIndex}`} id={makeId(qIndex, o, i)} onChange={(e) => radioOnChange(e, i)} />
-                    <label htmlFor={makeId(qIndex, o, i)}> {o} </label>
-                </div>)
+                /*  q.options.map((o, i) => <div key={i}>
+                     <input type={"radio"} value={`${o}`} name={`${qIndex}`} id={makeId(qIndex, o, i)} onChange={(e) => radioOnChange(e, i)} />
+                     <label htmlFor={makeId(qIndex, o, i)}> {o} </label>
+                 </div>) */
             }
         </div>
     );

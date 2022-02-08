@@ -1,5 +1,5 @@
 export default class AnswerObj {
-    constructor(answer, question, typeOfQuestion, indexOfQuestion) {
+    constructor(question, answer, typeOfQuestion, indexOfQuestion) {
         this.answer = answer;
         this.question = question;
         this.typeOfQuestion = typeOfQuestion;

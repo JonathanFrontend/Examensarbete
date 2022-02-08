@@ -11,7 +11,7 @@ function CheckboxQuestion({ q, qIndex }) {
     const answeredQuestions = useSelector(state => state.answeredQuestions);
 
     const [payload, setPayload] = useState({});
-    const [answerArr, setAnswerArr] = useState((answeredQuestions[qIndex].answer && answeredQuestions[qIndex].answer.length > 0) ? answeredQuestions[qIndex].answer : []);
+    const [answerArr, setAnswerArr] = useState((answeredQuestions && answeredQuestions[qIndex]) ? answeredQuestions[qIndex].answer : []);
     const [notaChecked, setNotaChecked] = useState(false);
     const firstRender = useRef(false);
     const dispatch = useDispatch();
@@ -27,7 +27,7 @@ function CheckboxQuestion({ q, qIndex }) {
         if (answerArr) {
             dispatch({
                 type: ANSWER_QUESTION,
-                payload: answer
+                payload: { ...answer }
             });
         } else {
             dispatch({
@@ -89,7 +89,7 @@ function CheckboxQuestion({ q, qIndex }) {
                         type={"checkbox"}
                         value={`${o}`}
                         className={`question-${qIndex}`}
-                        defaultChecked={(answeredQuestions[qIndex].answer.find(qo => qo === o)) ? true : false}
+                        defaultChecked={((answeredQuestions && answeredQuestions[qIndex]) && answeredQuestions[qIndex].answer.find(qo => qo === o)) ? true : false}
                         name={`${qIndex}`}
                         id={makeId(qIndex, o, i)}
                         onChange={(e, i) => {

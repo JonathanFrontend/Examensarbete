@@ -10,11 +10,11 @@ function RadioQuestion({ q, qIndex }) {
     const aq = useSelector(state => state.answeredQuestions);
 
     useEffect(() => {
-        if (!aq[qIndex].answer) {
+        if (!((aq && aq[qIndex]) && aq[qIndex].answer)) {
             const answer = new AnswerObj(q.question, "", "radio", qIndex);
             dispatch({
                 type: ANSWER_QUESTION,
-                payload: answer
+                payload: { ...answer }
             });
         }
     }, []);
@@ -24,11 +24,11 @@ function RadioQuestion({ q, qIndex }) {
         // const answer = new Answer(e.target.value, q.question, e.target.type, qIndex);
         // console.log("answer", answer);
         const answer = new AnswerObj(q.question, e.target.value, "radio", qIndex);
-        console.log("answer", answer);
+        console.log("answer", AnswerObj, answer);
 
         dispatch({
             type: ANSWER_QUESTION,
-            payload: answer
+            payload: { ...answer }
         });
         // console.log("poll", poll)
 
@@ -52,7 +52,7 @@ function RadioQuestion({ q, qIndex }) {
                 q.options.map((o, i) => <div key={i}>
                     <input
                         type={"radio"}
-                        defaultChecked={aq[qIndex] ? isAnswered(aq[qIndex], o) : false}
+                        defaultChecked={(aq && aq[qIndex]) ? isAnswered(aq[qIndex], o) : false}
                         value={`${o}`}
                         name={`${qIndex}`}
                         id={makeId(qIndex, o, i)}
