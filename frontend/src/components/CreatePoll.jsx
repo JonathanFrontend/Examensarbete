@@ -56,7 +56,9 @@ function CreatePoll(props) {
             if (currentOptions.length === 0) {
                 setCurrentOptions(["", ""]);
             }
-        }
+        } /* else if (event.target.value === "rating") {
+            setCurrentOptions([1, 2, 3, 4, 5]);
+        } */
     }
 
     if (user) {

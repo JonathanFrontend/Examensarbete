@@ -20,12 +20,9 @@
       "type": "text",
       "required": true
     },
-    "questions": {
-      "type": "json",
-      "required": true
-    },
     "pollEndsAt": {
-      "type": "date"
+      "type": "date",
+      "required": true
     },
     "author": {
       "type": "relation",
@@ -44,6 +41,9 @@
       "relation": "manyToMany",
       "target": "api::tag.tag",
       "inversedBy": "polls"
+    },
+    "questions": {
+      "type": "json"
     }
   }
 }
