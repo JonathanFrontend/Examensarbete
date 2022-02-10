@@ -2,6 +2,7 @@ import React from 'react';
 import RadioQuestion from '../QuestionTypes/RadioQuestion';
 import RatingQuestion from '../QuestionTypes/RatingQuestion';
 import CheckboxQuestion from '../QuestionTypes/CheckboxQuestion';
+import TextQuestion from '../QuestionTypes/TextQuestion';
 
 function Scanner({ q, qIndex }) {
     // console.log("q", q)
@@ -13,13 +14,9 @@ function Scanner({ q, qIndex }) {
         case "rating":
             return <RatingQuestion q={q} qIndex={qIndex} />;
         case "text":
-            return <div>
-                <input type={"text"} />
-            </div>;
+            return <TextQuestion q={q} qIndex={qIndex} />;
         default:
-            return <div>
-                <input type={"text"} />
-            </div>;
+            return <TextQuestion q={q} qIndex={qIndex} />;
     }
 }
 

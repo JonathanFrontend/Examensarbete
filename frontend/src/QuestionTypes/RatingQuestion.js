@@ -30,28 +30,26 @@ function RatingQuestion({ q, qIndex }) {
     return (
         <div>
             <div className='star-container'>
-                <div className='star-outer'>
-                    {
-                        stars.map((r, index) => {
-                            const id = makeId(qIndex, r, index);
-                            return (
-                                <span key={index} className='star-bg'>
-                                    <input type={"radio"}
-                                        name={`${qIndex}`}
-                                        className='star-rating'
-                                        value={r}
-                                        id={id}
-                                        defaultChecked={(aq && aq[qIndex]) ? isAnswered(aq[qIndex], r) : false}
-                                        onChange={(e) => {
-                                            setRating(e.target.value)
-                                            onChange(e, index)
-                                        }} />
-                                    <label className='star' htmlFor={id} style={{ color: (r <= rating) ? "#FFA500" : "#c4c4c4" }}> <i className="fas fa-star"></i> </label>
-                                </span>
-                            )
-                        })
-                    }
-                </div>
+                {
+                    stars.map((r, index) => {
+                        const id = makeId(qIndex, r, index);
+                        return (
+                            <span key={index} className='star-bg'>
+                                <input type={"radio"}
+                                    name={`${qIndex}`}
+                                    className='star-rating'
+                                    value={r}
+                                    id={id}
+                                    defaultChecked={(aq && aq[qIndex]) ? isAnswered(aq[qIndex], r) : false}
+                                    onChange={(e) => {
+                                        setRating(e.target.value)
+                                        onChange(e, index)
+                                    }} />
+                                <label className='star' htmlFor={id} style={{ color: (r <= rating) ? "#FFA500" : "#c4c4c4" }}> <i className="fas fa-star"></i> </label>
+                            </span>
+                        )
+                    })
+                }
             </div>
         </div>
     );

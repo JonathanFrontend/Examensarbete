@@ -23,7 +23,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route path="/start" element={<StartPage />} />
-          <Route path="/poll" element={<PollPage />} />
+          <Route path="/poll/:id" element={<PollPage />} />
           <Route path="/pollresults/:id" element={<PollResults />} />
           <Route path="/createPoll" element={<CreatePoll />} />
           <Route path="/login" element={<LoginPage />} />

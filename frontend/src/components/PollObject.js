@@ -21,17 +21,22 @@ function PollObject({ pollObject }) {
     return (
         <div className='poll-object'>
             <div onClick={() => {
-                // let ls = localStorage.getItem("chosenPoll");
                 dispatch({ type: UPDATE_POLL, payload: { pollInfo: pollInfo, pollQuestions: poll.questions } });
-                navigate(`/poll`);
+                navigate(`/poll/${pollObject.id}`);
             }}>
                 <h4>{pollInfo.title}</h4>
                 <h5>{pollInfo.author.username}</h5>
                 <h6>{pollInfo.description}</h6>
             </div>
             <div>
-                <button onClick={(e) => navigate(`/pollresults/${pollInfo.id}`)}>
-                    {"Results (so far)"}
+                <button onClick={() => {
+                    dispatch({ type: UPDATE_POLL, payload: { pollInfo: pollInfo, pollQuestions: poll.questions } });
+                    navigate(`/poll/${pollObject.id}`);
+                }}>
+                    {"Start"}
+                </button>
+                <button className='scnd-btn' onClick={(e) => navigate(`/pollresults/${pollInfo.id}`)}>
+                    {"Results"}
                 </button>
             </div>
         </div>

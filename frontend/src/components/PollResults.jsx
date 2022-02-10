@@ -12,7 +12,6 @@ function PollResults(props) {
         if (poll) {
             const answersCopy = [];
             const answeredPolls = poll.answered_polls.data;
-            console.log("answeredPolls", answeredPolls)
             for (let q of poll.questions) {
                 answersCopy.push([]);
             }
@@ -20,7 +19,6 @@ function PollResults(props) {
             for (let a of answeredPolls) {
                 const pollAnswers = a.attributes.pollAnswers;
                 for (let j of pollAnswers) {
-                    console.log("j", j)
                     answersCopy[j.indexOfQuestion].push(j.answer);
                 }
             }
@@ -36,7 +34,7 @@ function PollResults(props) {
             const questions = currentPoll.questions;
 
             for (let q of questions) {
-                sortedAnswersCopy.push({ question: q.question, answers: [] });
+                sortedAnswersCopy.push({ question: q.question, answers: [], type: q.type });
             };
 
             function getVotes(array, value, type) {
@@ -58,11 +56,18 @@ function PollResults(props) {
                     score += parseInt(v);
                 });
 
-                let averageRating = score / voteAmount;
+                let averageRating = (voteAmount > 0) ? score / voteAmount : 0;
 
                 return {
-                    answer: averageRating,
+                    answer: Math.round(averageRating * 10) / 10,
                     votes: voteAmount,
+                    type: type
+                };
+            };
+
+            function getComments(array, type) {
+                return {
+                    answer: array,
                     type: type
                 };
             };
@@ -83,11 +88,10 @@ function PollResults(props) {
                 } else if (q.type == "rating") {
                     sortedAnswersCopy[i].answers.push(calculateRating(answersCopy[i], q.type));
                 } else if (q.type == "text") {
-                    /* for (let r of ["1", "2", "3", "4", "5"]) {
-                        sortedAnswersCopy[i].answers.push(calculateRating(answersCopy[i], r, q.type));
-                    } */
+                    sortedAnswersCopy[i].answers.push(getComments(answersCopy[i], q.type))
                 }
             };
+            console.log("sortedAnswersCopy", sortedAnswersCopy);
             return sortedAnswersCopy;
         }
     }
@@ -114,7 +118,7 @@ function PollResults(props) {
                             }
                         </h1>
                     </div>
-                    <div>
+                    <div className='result-box'>
                         {
                             thePollResults ? thePollResults.map((q, i) => <ResultQuestion key={i} qna={q} poll={currentPoll} />) : "loading... please wait"
                         }

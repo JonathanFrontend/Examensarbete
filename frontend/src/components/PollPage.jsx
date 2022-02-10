@@ -8,7 +8,7 @@ import { UserContext } from '../contexts/UserContext';
 
 function PollPage(props) {
     const navigate = useNavigate();
-    // const param = useParams();
+    const params = useParams();
     // const poll = polls.find(p => p.id === param.id)
     // console.log("params poll", param, poll)
     const { user, setUser } = useContext(UserContext);

@@ -20,9 +20,6 @@ function RadioQuestion({ q, qIndex }) {
     }, []);
 
     const onChange = (e, oIndex) => {
-
-        // const answer = new Answer(e.target.value, q.question, e.target.type, qIndex);
-        // console.log("answer", answer);
         const answer = new AnswerObj(q.question, e.target.value, "radio", qIndex);
         console.log("answer", AnswerObj, answer);
 
@@ -30,12 +27,6 @@ function RadioQuestion({ q, qIndex }) {
             type: ANSWER_QUESTION,
             payload: { ...answer }
         });
-        // console.log("poll", poll)
-
-        // const updatedPoll = poll.questions[qIndex];
-        // const updatedQuestion = updatedPoll.type.options[oIndex];
-        // dispatch({ type: UPDATE_POLL, payload: { ...state, poll: {...poll, } } });
-        // console.log("updatedQuestion", updatedQuestion);
     }
 
     const isAnswered = (aq, o) => {
