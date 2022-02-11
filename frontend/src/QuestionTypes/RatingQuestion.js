@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import AnswerObj from '../blueprints/AnswerClass';
 import { makeId } from '../blueprints/makeId';
@@ -10,6 +10,16 @@ function RatingQuestion({ q, qIndex }) {
     const aq = useSelector(state => state.answeredQuestions)
     const [rating, setRating] = useState((aq && aq[qIndex] && !isNaN(aq[qIndex].answer)) ? parseInt(aq[qIndex].answer) : 0);
     let stars = [1, 2, 3, 4, 5];
+
+    useEffect(() => {
+        if (!((aq && aq[qIndex]) && aq[qIndex].answer)) {
+            const answer = new AnswerObj(q.question, "", "radio", qIndex);
+            dispatch({
+                type: ANSWER_QUESTION,
+                payload: { ...answer }
+            });
+        }
+    }, []);
 
     const onChange = (e, oIndex) => {
         const answer = new AnswerObj(q.question, e.target.value, "rating", qIndex);

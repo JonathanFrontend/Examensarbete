@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import polls from "../json/polls.json"
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,19 +9,17 @@ import { UserContext } from '../contexts/UserContext';
 function PollPage(props) {
     const navigate = useNavigate();
     const params = useParams();
-    // const poll = polls.find(p => p.id === param.id)
-    // console.log("params poll", param, poll)
     const { user, setUser } = useContext(UserContext);
     const state = useSelector(state => state);
     const pollInfo = useSelector(state => state.pollInfo);
     const pollQuestions = useSelector(state => state.pollQuestions);
     const answeredQuestions = useSelector(state => state.answeredQuestions);
     const dispatch = useDispatch();
+    const [unanswered, setUnanswered] = useState([]);
     console.log("state", state);
     console.log("answeredQuestions", answeredQuestions);
 
     function submitPoll() {
-        console.log("user", user)
         fetch("http://localhost:1337/api/answered-polls", {
             method: "POST",
             mode: "cors",
@@ -37,12 +35,27 @@ function PollPage(props) {
                 }
             }),
         }).then(r => r.json()).then(d => {
-            console.log(d);
+            if (d.data) {
+                dispatch({ type: RESET });
+                navigate("/");
+            }
         }).catch(err => console.error(err));
 
-        dispatch({ type: RESET });
-        navigate("/");
     }
+
+    function handleSubmit(aq) {
+        console.log("aq", aq);
+        let u = aq.filter(q => !q.answer || q.answer.length === 0);
+
+        console.log("u", u);
+
+        if (u.length !== 0) { //Om en fråga är obesvarad.
+            setUnanswered(u);
+        } else {
+            submitPoll();
+        }
+    }
+
     if (user) {
         return (
             <main className='main start-main'>
@@ -57,10 +70,10 @@ function PollPage(props) {
                         </div>
                         <div>
                             {
-                                pollQuestions.map((q, i) => <Question key={i} index={i} question={q} />)
+                                pollQuestions.map((q, i) => <Question key={i} index={i} question={q} unanswered={unanswered} />)
                             }
                         </div>
-                        <button onClick={submitPoll}>
+                        <button onClick={() => handleSubmit(answeredQuestions)}>
                             Submit
                         </button>
                     </div>

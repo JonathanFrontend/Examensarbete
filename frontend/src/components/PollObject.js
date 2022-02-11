@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { UPDATE_POLL } from "./../texts.js"
+import { RESET, UPDATE_POLL } from "./../texts.js"
 
 function PollObject({ pollObject }) {
     const navigate = useNavigate();
@@ -18,11 +18,24 @@ function PollObject({ pollObject }) {
         tags: poll.tags.data
     }
 
+    function startPoll() {
+        if (state.pollInfo.id !== pollObject.id && state.answeredQuestions.length > 0) {
+            if (window.confirm("You have an unanswered poll. Do you want to start a new one anyway?")) {
+                dispatch({ type: RESET, payload: {} });
+                dispatch({ type: UPDATE_POLL, payload: { pollInfo: pollInfo, pollQuestions: poll.questions } });
+                navigate(`/poll/${pollObject.id}`);
+            }
+        } else {
+            dispatch({ type: UPDATE_POLL, payload: { pollInfo: pollInfo, pollQuestions: poll.questions } });
+            navigate(`/poll/${pollObject.id}`);
+        }
+    }
+
+
     return (
         <div className='poll-object'>
             <div onClick={() => {
-                dispatch({ type: UPDATE_POLL, payload: { pollInfo: pollInfo, pollQuestions: poll.questions } });
-                navigate(`/poll/${pollObject.id}`);
+                startPoll();
             }}>
                 <h4>{pollInfo.title}</h4>
                 <h5>{pollInfo.author.username}</h5>
@@ -30,8 +43,7 @@ function PollObject({ pollObject }) {
             </div>
             <div>
                 <button onClick={() => {
-                    dispatch({ type: UPDATE_POLL, payload: { pollInfo: pollInfo, pollQuestions: poll.questions } });
-                    navigate(`/poll/${pollObject.id}`);
+                    startPoll();
                 }}>
                     {"Start"}
                 </button>

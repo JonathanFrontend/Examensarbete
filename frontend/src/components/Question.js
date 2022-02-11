@@ -20,19 +20,12 @@ function Scanner({ q, qIndex }) {
     }
 }
 
-function Question({ question, index }) {
+function Question({ question, index, unanswered }) {
+    const findIfUnanswered = unanswered.find(q => q.indexOfQuestion === index);
 
-
-    const ratingLoop = (n) => {
-        let stars = "";
-        for (let i = 1; i <= n; i++) {
-
-        }
-    }
-
-
+    console.log("unansweredId", unanswered.find(q => q.indexOfQuestion === index))
     return (
-        <section>
+        <section className={(findIfUnanswered && (findIfUnanswered.indexOfQuestion === index)) ? "unanswered" : ""}>
             <h3>{question.question}</h3>
             {
                 <Scanner q={question} qIndex={index} />
