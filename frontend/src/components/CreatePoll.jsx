@@ -141,9 +141,22 @@ function CreatePoll(props) {
                             </div>
                             <div id='created-questions'>
                                 {
-                                    questions && questions.map((q, i) => <div key={i}>
-                                        <h4>{q.question}</h4>
-                                        <h5>{q.type}</h5>
+                                    questions && questions.map((q, i) => <div className='created-question' key={i}>
+                                        <div>
+                                            <span>
+                                                <h4>{q.question}</h4>
+                                                <h5>{q.type}</h5>
+                                            </span>
+                                            <span>
+                                                <h3 onClick={() => {
+                                                    let newArr = [...questions];
+                                                    newArr.splice(i, 1);
+                                                    setQuestions(newArr);
+                                                }} className='X'>
+                                                    X
+                                                </h3>
+                                            </span>
+                                        </div>
                                         {
                                             q.options && q.options.map((o, j) => <span key={j}>
                                                 {`${o} `}
@@ -238,7 +251,7 @@ function CreatePoll(props) {
                                                 </span>
                                             })
                                         }
-                                        <button onClick={() => {
+                                        <button className='scnd-btn' onClick={() => {
                                             const arr = [...currentOptions];
                                             arr.push("");
                                             setCurrentOptions(arr);
@@ -248,7 +261,7 @@ function CreatePoll(props) {
                                     </div>
                                 }
                             </div>
-                            <button onClick={() => {
+                            <button className='scnd-btn' onClick={() => {
                                 let cond1 = (
                                     currentQuestion.replace(/\s/g, '').length !== 0 &&
                                     currentQuestionType.replace(/\s/g, '').length !== 0
@@ -275,9 +288,11 @@ function CreatePoll(props) {
                                 Add question
                             </button>
                         </div>
-                        <button onClick={() => publishPoll()}>
-                            Publish
-                        </button>
+                        <div className='create-bottom'>
+                            <button onClick={() => publishPoll()}>
+                                Publish
+                            </button>
+                        </div>
                     </div>
                 </section>
             </main>

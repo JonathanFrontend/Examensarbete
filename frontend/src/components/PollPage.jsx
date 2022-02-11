@@ -44,11 +44,7 @@ function PollPage(props) {
     }
 
     function handleSubmit(aq) {
-        console.log("aq", aq);
         let u = aq.filter(q => !q.answer || q.answer.length === 0);
-
-        console.log("u", u);
-
         if (u.length !== 0) { //Om en fråga är obesvarad.
             setUnanswered(u);
         } else {
