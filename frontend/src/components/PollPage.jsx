@@ -19,6 +19,13 @@ function PollPage(props) {
     console.log("state", state);
     console.log("answeredQuestions", answeredQuestions);
 
+    useEffect(async () => {
+        const fetchAPs = await fetch(`http://localhost:1337/api/user/${pollInfo.id}?populate=*`);
+        const res = await fetchAPs.json();
+        for (let ap in res.data.attributes.answered_polls)
+            console.log("res", res)
+    }, [pollInfo])
+
     function submitPoll() {
         fetch("http://localhost:1337/api/answered-polls", {
             method: "POST",

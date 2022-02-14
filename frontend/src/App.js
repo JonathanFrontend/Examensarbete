@@ -17,9 +17,11 @@ function App() {
 
   const userValue = useMemo(() => ({ user, setUser }), [user, setUser]);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (user) {
-
+      const fetchUserApi = await fetch(`http://localhost:1337/api/users/${user.user.id}?populate=*`);
+      const userData = await fetchUserApi.json();
+      console.log("userData", userData)
     }
   }, [])
 
