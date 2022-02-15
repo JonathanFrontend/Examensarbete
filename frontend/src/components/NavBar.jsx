@@ -33,7 +33,7 @@ function NavBar() {
             </div>
             <div className='box-2'>
                 {
-                    (user && answeredQuestions.length > 0 && pollInfo.id) && <Link to={`/poll/${pollInfo.id}`}>Poll</Link>
+                    (user && answeredQuestions.length > 0 && pollInfo.id) && <Link to={`/poll`}>Continue Poll</Link>
                 }
                 <Link to={"/"}>Start</Link>
                 {

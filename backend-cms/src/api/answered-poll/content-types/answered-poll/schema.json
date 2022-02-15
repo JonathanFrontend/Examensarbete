@@ -26,6 +26,9 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "answered_polls"
+    },
+    "UserID": {
+      "type": "string"
     }
   }
 }

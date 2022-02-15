@@ -19,14 +19,48 @@ function PollPage(props) {
     console.log("state", state);
     console.log("answeredQuestions", answeredQuestions);
 
-    useEffect(async () => {
-        const fetchAPs = await fetch(`http://localhost:1337/api/user/${pollInfo.id}?populate=*`);
-        const res = await fetchAPs.json();
-        for (let ap in res.data.attributes.answered_polls)
-            console.log("res", res)
-    }, [pollInfo])
+    useEffect(() => {
+        async function fetchData() {
+            const fetchAPs = await fetch(`http://localhost:1337/api/polls/${pollInfo.id}?populate=*`);
+            const pollData = await fetchAPs.json();
+            const answeredPolls = pollData.data.attributes.answered_polls.data;
+            const findUsersID = answeredPolls.find(p => p.attributes.UserID === `${user.user.id}`);
+            if (findUsersID && findUsersID.attributes.UserID === `${user.user.id}`) {
+                navigate('/start');
+            }
+            /* if (res.data.attributes) {
+                const findIfUserHasAnswered = res.data.attributes.answerers.find(a => a === user.user.id);
+                console.log("findIfUserHasAnswered", findIfUserHasAnswered)
+                if (findIfUserHasAnswered) {
+
+                }
+            } */
+
+
+        }
+        fetchData();
+    }, [])
 
     function submitPoll() {
+        /* fetch(`http://localhost:1337/api/users/${pollInfo.id}`, {
+            method: "PUT",
+            mode: "cors",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Authorization": "Bearer " + user.jwt
+            },
+            body: JSON.stringify({
+                data: {
+                    listOfAnsweredPolls: [...pollInfo.answerers].push(user.user.id)
+                }
+            }),
+        }).then(r => r.json()).then(d => {
+            if (d.data) {
+                dispatch({ type: RESET });
+                navigate("/");
+            }
+        }).catch(err => console.error(err)); */
+
         fetch("http://localhost:1337/api/answered-polls", {
             method: "POST",
             mode: "cors",
@@ -38,7 +72,8 @@ function PollPage(props) {
                 data: {
                     pollAnswers: answeredQuestions,
                     poll: pollInfo.id,
-                    author: user.user.id
+                    author: user.user.id,
+                    UserID: `${user.user.id}`
                 }
             }),
         }).then(r => r.json()).then(d => {

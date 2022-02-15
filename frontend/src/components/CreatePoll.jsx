@@ -17,6 +17,7 @@ function CreatePoll(props) {
     const [pollTagIds, setPollTagIds] = useState([]);
     const [questions, setQuestions] = useState([]);
     const [pollEndsAt, setPollEndsAt] = useState("");
+    const [tagWord, setTagWord] = useState("");
 
     //Current question attributes
     const [currentQuestion, setCurrentQuestion] = useState("");
@@ -24,7 +25,7 @@ function CreatePoll(props) {
     const [currentOptions, setCurrentOptions] = useState([]);
 
     const tags = useFetch("http://localhost:1337/api/tags");
-    console.log(tags)
+    console.log("tags", tags)
     function publishPoll() {
         fetch("http://localhost:1337/api/polls", {
             method: "POST",
@@ -92,12 +93,11 @@ function CreatePoll(props) {
                                             </ul>
                                         </div>
                                         <input type={"text"} list='tag-list' onChange={(e) => {
-
                                             let pollTagsArr = [...pollTags];
                                             let tagArr = [...tags.data.data];
 
                                             let findTag = [...tagArr].find(t => {
-                                                // console.log("t", t)
+                                                console.log("t", t)
                                                 return t.attributes.name === e.target.value;
                                             });
 
@@ -110,6 +110,7 @@ function CreatePoll(props) {
 
                                             let tagArray = arrRemoveDuplicates.map(i => i.id);
 
+                                            setTagWord(e.target.value);
                                             setPollTags(arrRemoveDuplicates);
                                             setPollTagIds(tagArray);
                                         }} />
@@ -126,6 +127,38 @@ function CreatePoll(props) {
                                                     ) : ""
                                             }
                                         </datalist>
+                                        {
+                                            ((!tags.loading && !tags.error) &&
+                                                tags.data.data.find((tag, i) => {
+                                                    if (tag.attributes.name.toLowerCase().includes(tagWord.toLowerCase())) {
+                                                        return true
+                                                    }
+                                                })) ? "" : <button
+                                                    className='scnd-btn'
+                                                    onClick={() => {
+                                                        fetch("http://localhost:1337/api/tags", {
+                                                            method: "POST",
+                                                            mode: "cors",
+                                                            headers: {
+                                                                "Content-type": "application/json; charset=UTF-8",
+                                                                "Authorization": "Bearer " + user.jwt
+                                                            },
+                                                            body: JSON.stringify({
+                                                                data: {
+                                                                    name: tagWord,
+                                                                    polls: []
+                                                                }
+                                                            })
+                                                        }).then(r => r.json()).then(d => {
+                                                            let pollTagsCopy = [...pollTags];
+                                                            let pollTagIdsCopy = [...pollTagIds];
+                                                            pollTagsCopy.push(d.data);
+                                                            pollTagIdsCopy.push(d.data.id);
+                                                            setPollTags(pollTagsCopy);
+                                                            setPollTagIds(pollTagIdsCopy);
+                                                        }).catch(err => console.log(err));
+                                                    }}>Create new category</button>
+                                        }
                                     </div>
                                 </div>
                                 <div>

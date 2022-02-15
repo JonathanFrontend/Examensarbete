@@ -148,6 +148,24 @@ body {
   border-bottom: .5px solid rgba(133, 218, 255, 0.6);
   cursor: pointer;
 }
+  .poll-object h4{
+    color: rgb(27, 8, 6);
+    font-size: 20px;
+  }
+  .poll-object h5{
+    color: rgb(27, 8, 6);
+    font-size: 17px;
+  }
+  .poll-object h6{
+    color: rgb(27, 8, 6);
+  }
+  .poll-object .title {
+    display: flex;
+    justify-content: space-between;
+  }
+  .poll-object .title p {
+    font-size: .85rem;
+  }
 
 button {
   background-color: hsl(198, 47%, 59%);
@@ -190,6 +208,10 @@ button.scnd-btn {
   font-weight: 900;
 }
 .star{
+}
+
+.poll-completed {
+  background-color: rgb(166, 250, 177);
 }
 
 /*Results*/

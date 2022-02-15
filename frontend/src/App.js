@@ -17,21 +17,13 @@ function App() {
 
   const userValue = useMemo(() => ({ user, setUser }), [user, setUser]);
 
-  useEffect(async () => {
-    if (user) {
-      const fetchUserApi = await fetch(`http://localhost:1337/api/users/${user.user.id}?populate=*`);
-      const userData = await fetchUserApi.json();
-      console.log("userData", userData)
-    }
-  }, [])
-
   return (
     <Router>
       <UserContext.Provider value={userValue}>
         <NavBar />
         <Routes>
           <Route path="/start" element={<StartPage />} />
-          <Route path="/poll/:id" element={<PollPage />} />
+          <Route path="/poll" element={<PollPage />} />
           <Route path="/pollresults/:id" element={<PollResults />} />
           <Route path="/createPoll" element={<CreatePoll />} />
           <Route path="/login" element={<LoginPage />} />

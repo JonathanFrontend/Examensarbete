@@ -74,6 +74,9 @@
       "relation": "oneToMany",
       "target": "api::poll.poll",
       "mappedBy": "author"
+    },
+    "listOfAnsweredPolls": {
+      "type": "json"
     }
   }
 }
