@@ -23,6 +23,10 @@ function CreatePoll(props) {
     const [currentQuestion, setCurrentQuestion] = useState("");
     const [currentQuestionType, setCurrentQuestionType] = useState("");
     const [currentOptions, setCurrentOptions] = useState([]);
+    const [addImage, setAddImage] = useState(false);
+    function handleSubmit() {
+
+    }
 
     const tags = useFetch("http://localhost:1337/api/tags");
     console.log("tags", tags)
@@ -264,12 +268,14 @@ function CreatePoll(props) {
                                                             const arr = [...currentOptions];
                                                             arr[i] = e.target.value;
                                                             setCurrentOptions(arr);
-                                                            /* if (e.target.value.replace(/\s/g, '')) {
-                                                                const arr = [...currentOptions];
-                                                                arr[i] = e.target.value;
-                                                                setCurrentOptions(arr);
-                                                            } */
                                                         }} />
+                                                    {
+                                                        addImage &&
+                                                        <form onSubmit={handleSubmit}>
+                                                            <input type={"file"} />
+                                                            <input type={"submit"}>Submit</input>
+                                                        </form>
+                                                    }
                                                     <span
                                                         className='X'
                                                         onClick={(e) => {

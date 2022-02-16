@@ -10,20 +10,16 @@ function StartPage() {
     const pollInfo = useSelector(state => state.pollInfo);
     const pollQuestions = useSelector(state => state.pollQuestions);
     const [polls, setPolls] = useState([]);
-
     const { user, setUser } = useContext(UserContext);
 
     useEffect(() => {
 
         fetch("http://localhost:1337/api/polls?populate=*").then(r => r.json()).then(d => {
-            console.log("user: ", user);
-            console.log("data: ", d.data[0]);
             setPolls(d.data);
         }).catch(err => console.error(err));
 
 
         if (localStorage.getItem("user")) {
-            console.log('JSON.parse(localStorage.getItem("user"))', JSON.parse(localStorage.getItem("user")))
             if (JSON.parse(localStorage.getItem("user"))) {
                 setUser(JSON.parse(localStorage.getItem("user")));
             } else if (!JSON.parse(localStorage.getItem("user"))) {
@@ -33,12 +29,6 @@ function StartPage() {
 
     }, []);
 
-    // console.log("state", chosenPoll, answeredQuestions);
-
-    /* const [ polls, setPolls ] = useState([]);
-    useEffect(() => {
-
-    }, []) */
     return (
         <main className='main start-main'>
             <section className='section start-section'>

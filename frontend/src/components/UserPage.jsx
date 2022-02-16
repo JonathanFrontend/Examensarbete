@@ -6,11 +6,13 @@ function UserPage(props) {
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     return (
-        <main className='main'>
-            <div className='user-box'>
-                <div className='box-1'>
-                    <h1>{user.user ? user.user.username : "User page"}</h1>
-                    <span>
+        <main className='main start-main user-main'>
+            <section className='section start-section'>
+                <div className='section-div'>
+                    <div>
+                        <h1>{user.user ? user.user.username : "User page"}</h1>
+                    </div>
+                    <div>
                         <button onClick={() => {
                             navigate("/createPoll");
                         }}>
@@ -23,7 +25,7 @@ function UserPage(props) {
                         }}>
                             Log out
                         </button>
-                    </span>
+                    </div>
                 </div>
                 <div>
                     <p>
@@ -33,7 +35,7 @@ function UserPage(props) {
                 </div>
                 <div>
                 </div>
-            </div>
+            </section>
         </main>
     );
 }

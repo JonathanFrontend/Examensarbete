@@ -6,6 +6,7 @@ function LoginPage(props) {
     const { user, setUser } = useContext(UserContext);
     const [usernameinput, setUsernameinput] = useState("");
     const [passwordinput, setPasswordinput] = useState("");
+    const [couldNotLogIn, setCouldNotLogIn] = useState(false);
     const navigate = useNavigate();
     return (
         <main className='main start-main login-main'>
@@ -18,12 +19,20 @@ function LoginPage(props) {
                     </div>
                     <div className='login-div'>
                         <div>
-                            <label className='login-label' htmlFor='username'>Username </label><br />
-                            <input type={"text"} id="username" onChange={(e) => setUsernameinput(e.target.value)} />
+                            <label className='login-label' htmlFor='username'>Email </label><br />
+                            <input
+                                className={(couldNotLogIn && usernameinput === "") ? "couldNotLogIn" : ""}
+                                type={"email"}
+                                id="username"
+                                onChange={(e) => setUsernameinput(e.target.value)} />
                         </div>
                         <div>
                             <label className='login-label' htmlFor='password'>Password </label><br />
-                            <input type={"password"} id="password" onChange={(e) => setPasswordinput(e.target.value)} />
+                            <input
+                                className={(couldNotLogIn && passwordinput === "") ? "couldNotLogIn" : ""}
+                                type={"password"}
+                                id="password"
+                                onChange={(e) => setPasswordinput(e.target.value)} />
                         </div>
                         <button onClick={() => {
 
@@ -36,14 +45,18 @@ function LoginPage(props) {
                                     password: passwordinput
                                 })
                             }).then(r => r.json()).then(d => {
-                                console.log("d", d)
                                 if (d.user) {
                                     setUser(d);
                                     localStorage.setItem("user", JSON.stringify(d));
                                     navigate('/user')
+                                } else {
+                                    setCouldNotLogIn(true)
                                 }
 
-                            }).catch(err => console.error(err));
+                            }).catch(err => {
+                                setCouldNotLogIn(true)
+                                console.error(err)
+                            });
 
                         }}>Log in</button>
                     </div>

@@ -143,6 +143,10 @@ body {
 .section-div > div:nth-child(1) h1 {
   color: #fff;
 }
+
+.couldNotLogIn {
+  border: 1px solid rgb(204, 31, 31);
+}
  
 .login-div {
   width: 60%;
@@ -173,7 +177,7 @@ body {
     font-size: .85rem;
   }
     .expire-soon {
-      color: rgb(192, 11, 11);
+      color: rgb(204, 31, 31);
     }
 
 button {

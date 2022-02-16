@@ -11,18 +11,18 @@ function PollObject({ pollObject }) {
     const state = useSelector(state => state);
     const dispatch = useDispatch();
     const poll = pollObject.attributes;
-    console.log("poll", poll);
 
     useEffect(() => {
-        console.log("poll", poll);
-        const findUsersID = poll.answered_polls.data.find(p => {
-            if (p.attributes) {
-                return p.attributes.UserID === `${user.user.id}`
+        if (user) {
+            const findUsersID = poll.answered_polls.data.find(p => {
+                if (p.attributes) {
+                    return p.attributes.UserID === `${user.user.id}`
+                }
+            });
+
+            if (findUsersID && findUsersID.attributes.UserID === `${user.user.id}`) {
+                setIsAnswered(true);
             }
-        });
-        console.log("findUsersID", findUsersID);
-        if (findUsersID && findUsersID.attributes.UserID === `${user.user.id}`) {
-            setIsAnswered(true);
         }
     }, [])
 
@@ -63,7 +63,7 @@ function PollObject({ pollObject }) {
                     <h4>{pollInfo.title}</h4>
                     <p
                         className={
-                            ((new Date(pollInfo.pollEndsAt).getTime() >= new Date().getTime()) && new Date(pollInfo.pollEndsAt).getTime() - new Date().getTime() <= (7 * 24 * 3600000)) && "expire-soon"
+                            ((new Date(pollInfo.pollEndsAt).getTime() >= new Date().getTime()) && new Date(pollInfo.pollEndsAt).getTime() - new Date().getTime() <= (7 * 24 * 3600000)) ? "expire-soon" : ""
                         }>
                         Poll ends at: {pollInfo.pollEndsAt}
                     </p>
@@ -73,7 +73,7 @@ function PollObject({ pollObject }) {
             </div>
             <div>
                 {
-                    (!isAnswered && (new Date(pollInfo.pollEndsAt).getTime() >= new Date().getTime())) &&
+                    (user && !isAnswered && (new Date(pollInfo.pollEndsAt).getTime() >= new Date().getTime())) &&
                     <button onClick={() => {
                         checkPoll();
                     }}>
