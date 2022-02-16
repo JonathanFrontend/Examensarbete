@@ -166,6 +166,9 @@ body {
   .poll-object .title p {
     font-size: .85rem;
   }
+    .expire-soon {
+      color: rgb(192, 11, 11);
+    }
 
 button {
   background-color: hsl(198, 47%, 59%);

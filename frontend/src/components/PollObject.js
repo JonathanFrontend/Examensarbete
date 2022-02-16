@@ -42,15 +42,13 @@ function PollObject({ pollObject }) {
     }
 
     function checkPoll() {
-
-        if (new Date(pollInfo.pollEndsAt).getTime() >= new Date().getTime()) {
-            if (state.pollInfo.id !== pollObject.id && state.answeredQuestions.length > 0) {
-                if (window.confirm("You have an unanswered poll. Do you want to start a new one anyway?")) {
-                    dispatch({ type: RESET, payload: {} });
-                    startPoll();
-                }
+        if (state.pollInfo.id !== pollObject.id && state.answeredQuestions.length > 0) {
+            if (window.confirm("You have an unanswered poll. Do you want to start a new one anyway?")) {
+                dispatch({ type: RESET, payload: {} });
+                startPoll();
             }
-        } else {
+        }
+        else {
             startPoll();
         }
     }
@@ -61,13 +59,21 @@ function PollObject({ pollObject }) {
             <div onClick={() => {
                 checkPoll();
             }}>
-                <div className='title'><h4>{pollInfo.title}</h4><p>Poll ends at: {pollInfo.pollEndsAt}</p></div>
+                <div className='title'>
+                    <h4>{pollInfo.title}</h4>
+                    <p
+                        className={
+                            ((new Date(pollInfo.pollEndsAt).getTime() >= new Date().getTime()) && new Date(pollInfo.pollEndsAt).getTime() - new Date().getTime() <= (7 * 24 * 3600000)) && "expire-soon"
+                        }>
+                        Poll ends at: {pollInfo.pollEndsAt}
+                    </p>
+                </div>
                 <h5>{pollInfo.author.username}</h5>
                 <p>{pollInfo.description}</p>
             </div>
             <div>
                 {
-                    !isAnswered &&
+                    (!isAnswered && (new Date(pollInfo.pollEndsAt).getTime() >= new Date().getTime())) &&
                     <button onClick={() => {
                         checkPoll();
                     }}>
