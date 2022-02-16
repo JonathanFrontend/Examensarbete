@@ -91,7 +91,6 @@ function PollResults(props) {
                     sortedAnswersCopy[i].answers.push(getComments(answersCopy[i], q.type))
                 }
             };
-            console.log("sortedAnswersCopy", sortedAnswersCopy);
             return sortedAnswersCopy;
         }
     }

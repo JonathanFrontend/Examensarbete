@@ -4,9 +4,6 @@ function ResultQuestion({ qna, poll }) {
     const [totalVotes, setTotalVotes] = useState(0);
     useEffect(() => {
         let newTotalVotes = 0;
-        /* for (let i = 0; i < qna.answers.length; i++) {
-            newTotalVotes += qna.answers[i].votes;
-        } */
         for (let a of qna.answers) {
             newTotalVotes += a.votes;
         }

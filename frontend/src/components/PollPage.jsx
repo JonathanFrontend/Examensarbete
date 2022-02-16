@@ -16,8 +16,6 @@ function PollPage(props) {
     const answeredQuestions = useSelector(state => state.answeredQuestions);
     const dispatch = useDispatch();
     const [unanswered, setUnanswered] = useState([]);
-    console.log("state", state);
-    console.log("answeredQuestions", answeredQuestions);
 
     useEffect(() => {
         async function fetchData() {
@@ -28,39 +26,11 @@ function PollPage(props) {
             if (findUsersID && findUsersID.attributes.UserID === `${user.user.id}`) {
                 navigate('/start');
             }
-            /* if (res.data.attributes) {
-                const findIfUserHasAnswered = res.data.attributes.answerers.find(a => a === user.user.id);
-                console.log("findIfUserHasAnswered", findIfUserHasAnswered)
-                if (findIfUserHasAnswered) {
-
-                }
-            } */
-
-
         }
         fetchData();
     }, [])
 
     function submitPoll() {
-        /* fetch(`http://localhost:1337/api/users/${pollInfo.id}`, {
-            method: "PUT",
-            mode: "cors",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                "Authorization": "Bearer " + user.jwt
-            },
-            body: JSON.stringify({
-                data: {
-                    listOfAnsweredPolls: [...pollInfo.answerers].push(user.user.id)
-                }
-            }),
-        }).then(r => r.json()).then(d => {
-            if (d.data) {
-                dispatch({ type: RESET });
-                navigate("/");
-            }
-        }).catch(err => console.error(err)); */
-
         fetch("http://localhost:1337/api/answered-polls", {
             method: "POST",
             mode: "cors",
