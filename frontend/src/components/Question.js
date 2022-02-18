@@ -29,6 +29,13 @@ function Question({ question, index, unanswered }) {
         <section className={(findIfUnanswered && (findIfUnanswered.indexOfQuestion === index)) ? "unanswered" : ""}>
             <h3>{question.question}</h3>
             {
+                (question.images && question.images.length > 0) &&
+                question.images.map((p, i) => <span key={i} className='img-span'>
+                    <img src={`http://localhost:1337${p}`} width="200" />
+                    <p> {"Images " + i + 1} </p>
+                </span>)
+            }
+            {
                 <Scanner q={question} qIndex={index} />
             }
         </section>

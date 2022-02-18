@@ -347,3 +347,18 @@ button.scnd-btn {
   cursor: pointer;
   color: rgb(209, 53, 26);
 }
+
+.img-span{
+  display: inline-flex;
+  width: auto;
+  flex-direction: column;
+  margin: 10px;
+}
+.img-span p{
+  display: inline;
+  width: 100%;
+  text-align: center;
+}
+.img-span p{
+  display: inline;
+}

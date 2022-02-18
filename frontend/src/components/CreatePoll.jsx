@@ -3,6 +3,7 @@ import { useStore } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import useFetch from '../hooks/useFetch';
+import axios from "axios";
 
 
 function CreatePoll(props) {
@@ -34,27 +35,36 @@ function CreatePoll(props) {
         setFileToUpload(event.target.files[0]);
     }
 
-    function handleSubmitFile(event, file) {
+    async function handleSubmitFile(event, file) {
         event.preventDefault();
-
-        console.log("file", file);
         const fileData = new FormData();
         fileData.append("files", file);
-
-        console.log("fileToUpload", fileToUpload);
-        for (var p of fileData) {
-            console.log("fileData", p);
+        const upload_res = await axios({
+            method: "POST",
+            url: "http://localhost:1337/api/upload",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                'Authorization': `Bearer ${user.jwt}`
+            },
+            data: fileData,
+        });
+        console.log("upload_res", upload_res);
+        if (upload_res.status === 200) {
+            let imageArrayCopy = [...imageArray];
+            imageArrayCopy.push(upload_res.data[0].url);
+            setImageArray(imageArrayCopy);
+        } else {
+            console.error(upload_res)
         }
 
-
-        fetch("http://localhost:1337/api/upload", {
+        /* fetch("http://localhost:1337/api/upload", {
             method: "POST",
             mode: "cors",
             headers: {
                 "Content-type": "application/json; charset=UTF-8",
                 "Authorization": "Bearer " + user.jwt
             },
-            body: fileData
+            body: JSON.stringify(fileData)
         }).then(
             function (res) {
                 console.log("uploadRes", res);
@@ -64,13 +74,42 @@ function CreatePoll(props) {
             function (data) {
                 console.log("uploadData", data);
             }
-        );
+        ).catch(err => console.error(err)); */
 
     }
 
     const tags = useFetch("http://localhost:1337/api/tags");
 
     function publishPoll() {
+
+        /* const pollRes = await axios.post(
+            'http://localhost:1337/api/polls',
+            {
+                title: title,
+                description: description,
+                author: user.user.id,
+                questions: questions,
+                pollEndsAt: pollEndsAt,
+                answered_polls: [],
+                images: addImage ? imageArray : [],
+                tags: pollTagIds
+            },
+            {
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": "Bearer " + user.jwt,
+                },
+            }
+        );
+
+        console.log("pollRes", pollRes);
+
+        if (pollRes && (pollRes.status >= 200 && pollRes.status <= 399)) {
+            navigate("/");
+        } else {
+            console.log(pollRes);
+        } */
+
         fetch("http://localhost:1337/api/polls", {
             method: "POST",
             mode: "cors",
@@ -245,16 +284,31 @@ function CreatePoll(props) {
                                     <input type={"text"} value={currentQuestion} id='question' onChange={(e) => setCurrentQuestion(e.target.value)} />
                                     {
                                         addImage
-                                            ? <button onClick={() => setAddImage(false)}>Don't use image</button>
+                                            ? <button onClick={() => {
+                                                setAddImage(false)
+                                                setImageArray([])
+                                            }}>Don't use images</button>
                                             : <button onClick={() => setAddImage(true)}>Use images</button>
                                     }
                                 </div>
                                 <br />
                                 <div>
+                                    {console.log("imageArray", imageArray)}
                                     {
-                                        imageArray && imageArray.map((image, i) => {
-
-                                        })
+                                        (addImage && imageArray) && imageArray.map((imgUrl, i) =>
+                                            <span key={i} className='img-span'>
+                                                <img
+                                                    alt={`image-${i + 1}`}
+                                                    src={`http://localhost:1337${imgUrl}`}
+                                                    width="200"
+                                                />
+                                                <p>{`Image ${i + 1}`}<span className='X' onClick={(e) => {
+                                                    let arr = [...imageArray];
+                                                    arr.splice((p, j) => j === 1);
+                                                    setImageArray(arr);
+                                                }}>x</span></p>
+                                            </span>
+                                        )
                                     }
                                     {
                                         addImage &&
@@ -363,6 +417,7 @@ function CreatePoll(props) {
                                     const questionObj = {
                                         question: currentQuestion,
                                         type: currentQuestionType,
+                                        images: addImage ? imageArray : [],
                                         options: (currentQuestionType === "radio" || currentQuestionType === "checkbox") ? currentOptions : []
                                     }
                                     let arr = [...questions];
@@ -371,6 +426,8 @@ function CreatePoll(props) {
                                     setCurrentQuestion("");
                                     //setCurrentQuestionType("radio");
                                     setCurrentOptions(["", ""])
+                                    setAddImage(false);
+                                    setImageArray([]);
                                 }
                             }}>
                                 Add question
