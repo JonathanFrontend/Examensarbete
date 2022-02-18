@@ -52,7 +52,7 @@ function PollObject({ pollObject }) {
             startPoll();
         }
     }
-
+    const day = (1000 * 60 * 60 * 24);
 
     return (
         <div className={`poll-object ${isAnswered && "poll-completed"}`}>
@@ -63,9 +63,13 @@ function PollObject({ pollObject }) {
                     <h4>{pollInfo.title}</h4>
                     <p
                         className={
-                            ((new Date(pollInfo.pollEndsAt).getTime() >= new Date().getTime()) && new Date(pollInfo.pollEndsAt).getTime() - new Date().getTime() <= (7 * 24 * 3600000)) ? "expire-soon" : ""
+                            (new Date(pollInfo.pollEndsAt).getTime() - new Date().getTime() <= (7 * 24 * 3600000)) ? "expire-soon" : ""
                         }>
-                        Poll ends at: {pollInfo.pollEndsAt}
+                        Poll
+                        {(Math.floor(new Date(pollInfo.pollEndsAt).getTime() / day) < Math.floor(new Date().getTime() / day))
+                            ? " ended "
+                            : " ends "}
+                        at: {pollInfo.pollEndsAt}
                     </p>
                 </div>
                 <h5>{pollInfo.author.username}</h5>

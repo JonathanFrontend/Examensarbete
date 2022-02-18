@@ -24,12 +24,52 @@ function CreatePoll(props) {
     const [currentQuestionType, setCurrentQuestionType] = useState("");
     const [currentOptions, setCurrentOptions] = useState([]);
     const [addImage, setAddImage] = useState(false);
-    function handleSubmit() {
+    const [imageArray, setImageArray] = useState([]);
+
+    //fileupload
+    const [fileToUpload, setFileToUpload] = useState(null);
+
+    function onChangeFile(event) {
+        console.log("file", event.target.files);
+        setFileToUpload(event.target.files[0]);
+    }
+
+    function handleSubmitFile(event, file) {
+        event.preventDefault();
+
+        console.log("file", file);
+        const fileData = new FormData();
+        fileData.append("files", file);
+
+        console.log("fileToUpload", fileToUpload);
+        for (var p of fileData) {
+            console.log("fileData", p);
+        }
+
+
+        fetch("http://localhost:1337/api/upload", {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Authorization": "Bearer " + user.jwt
+            },
+            body: fileData
+        }).then(
+            function (res) {
+                console.log("uploadRes", res);
+                return res.json();
+            }
+        ).then(
+            function (data) {
+                console.log("uploadData", data);
+            }
+        );
 
     }
 
     const tags = useFetch("http://localhost:1337/api/tags");
-    console.log("tags", tags)
+
     function publishPoll() {
         fetch("http://localhost:1337/api/polls", {
             method: "POST",
@@ -50,7 +90,6 @@ function CreatePoll(props) {
                 }
             })
         }).then(r => r.json()).then(d => {
-            console.log("d", d);
             navigate("/");
         }).catch(err => console.log(err));
     }
@@ -61,9 +100,7 @@ function CreatePoll(props) {
             if (currentOptions.length === 0) {
                 setCurrentOptions(["", ""]);
             }
-        } /* else if (event.target.value === "rating") {
-            setCurrentOptions([1, 2, 3, 4, 5]);
-        } */
+        }
     }
 
     if (user) {
@@ -101,11 +138,9 @@ function CreatePoll(props) {
                                             let tagArr = [...tags.data.data];
 
                                             let findTag = [...tagArr].find(t => {
-                                                console.log("t", t)
                                                 return t.attributes.name === e.target.value;
                                             });
 
-                                            // console.log("findTag", findTag);
                                             findTag && pollTagsArr.push(findTag);
 
                                             let arrRemoveDuplicates = pollTagsArr.filter((t, index) => {
@@ -208,7 +243,28 @@ function CreatePoll(props) {
                                         Question:
                                     </label>
                                     <input type={"text"} value={currentQuestion} id='question' onChange={(e) => setCurrentQuestion(e.target.value)} />
+                                    {
+                                        addImage
+                                            ? <button onClick={() => setAddImage(false)}>Don't use image</button>
+                                            : <button onClick={() => setAddImage(true)}>Use images</button>
+                                    }
                                 </div>
+                                <br />
+                                <div>
+                                    {
+                                        imageArray && imageArray.map((image, i) => {
+
+                                        })
+                                    }
+                                    {
+                                        addImage &&
+                                        <form onSubmit={(e) => handleSubmitFile(e, fileToUpload)}>
+                                            <input type={"file"} onChange={(e) => onChangeFile(e)} />
+                                            <input type={"submit"} value="Submit" />
+                                        </form>
+                                    }
+                                </div>
+                                <br />
                                 <div>
                                     <input
                                         type={"radio"}
@@ -269,13 +325,6 @@ function CreatePoll(props) {
                                                             arr[i] = e.target.value;
                                                             setCurrentOptions(arr);
                                                         }} />
-                                                    {
-                                                        addImage &&
-                                                        <form onSubmit={handleSubmit}>
-                                                            <input type={"file"} />
-                                                            <input type={"submit"}>Submit</input>
-                                                        </form>
-                                                    }
                                                     <span
                                                         className='X'
                                                         onClick={(e) => {
