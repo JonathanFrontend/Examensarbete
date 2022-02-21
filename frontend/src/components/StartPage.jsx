@@ -40,7 +40,7 @@ function StartPage() {
                     </div>
                     <div>
                         {
-                            polls ? polls.map((poll, i) => {
+                            (polls.length > 0) ? polls.map((poll, i) => {
                                 return poll ? <PollObject key={i} pollObject={poll} /> : ""
                             }) : "Loading..."
                         }

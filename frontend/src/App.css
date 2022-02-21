@@ -83,6 +83,13 @@ body {
   padding-left: 20px;
   padding-right: 20px;
 }
+
+.user-main .section-div .box-1 {
+  display: flex;
+  flex-direction: column;
+
+}
+
 .user-box {
   width: 100%;
   max-width: 1500px;
@@ -136,9 +143,9 @@ body {
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
   width: 100%;
-  background-color: hsl(198, 100%, 76%);
+  background-color: hsl(198, 47%, 59%);
   color:black;
-  border-bottom: 3px solid hsl(198, 47%, 59%);
+  border-bottom: 3px solid hsl(198, 100%, 76%);
 }
 .section-div > div:nth-child(1) h1 {
   color: #fff;
@@ -157,6 +164,7 @@ body {
 .poll-object {
   border-bottom: .5px solid rgba(133, 218, 255, 0.6);
   cursor: pointer;
+  padding: 5px;
 }
   .poll-object h4{
     color: rgb(27, 8, 6);
@@ -179,6 +187,17 @@ body {
     .expire-soon {
       color: rgb(204, 31, 31);
     }
+  .poll-object .tag-list{
+    list-style-type: none;
+    display: flex;
+    font-size: .75rem;
+  }
+  .poll-object .tag-list li {
+    margin-right: .5rem;
+  }
+  .poll-object button{
+    margin-left: 0;
+  }
 
 button {
   background-color: hsl(198, 47%, 59%);
@@ -206,6 +225,33 @@ button.scnd-btn {
   button.scnd-btn:hover {
     background-color: #dadada;
   }
+
+button.logout-btn{
+  background-color: rgb(204, 31, 31);
+  border: 3px solid rgb(204, 31, 31);
+  color: #ffffff;
+}
+  button.logout-btn:hover {
+    background-color: rgb(201, 79, 79);
+    border: 3px solid rgb(201, 79, 79);
+  }
+
+.section-div .box-1{
+  padding: 5px;
+}
+.section-div .box-1-2 {
+  display: flex;
+  justify-content: space-between;
+}
+.section-div .box-1 button {
+  margin-left: 0;
+}
+
+.profile-pic-default {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
 
 /* Answering */
 .unanswered {

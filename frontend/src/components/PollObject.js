@@ -73,6 +73,16 @@ function PollObject({ pollObject }) {
                     </p>
                 </div>
                 <h5>{pollInfo.author.username}</h5>
+                <div>
+                    <ul className='tag-list'>
+                        {
+                            (pollInfo.tags && Array.isArray(pollInfo.tags))
+                            && pollInfo.tags.map((tag, i) => <li key={i}>
+                                {`${tag.attributes.name}`}
+                            </li>)
+                        }
+                    </ul>
+                </div>
                 <p>{pollInfo.description}</p>
             </div>
             <div>
