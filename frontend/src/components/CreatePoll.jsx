@@ -31,7 +31,6 @@ function CreatePoll(props) {
     const [fileToUpload, setFileToUpload] = useState(null);
 
     function onChangeFile(event) {
-        console.log("file", event.target.files);
         setFileToUpload(event.target.files[0]);
     }
 
@@ -39,76 +38,31 @@ function CreatePoll(props) {
         event.preventDefault();
         const fileData = new FormData();
         fileData.append("files", file);
-        const upload_res = await axios({
-            method: "POST",
-            url: "http://localhost:1337/api/upload",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                'Authorization': `Bearer ${user.jwt}`
-            },
-            data: fileData,
-        });
-        console.log("upload_res", upload_res);
-        if (upload_res.status === 200) {
-            let imageArrayCopy = [...imageArray];
-            imageArrayCopy.push(upload_res.data[0].url);
-            setImageArray(imageArrayCopy);
-        } else {
-            console.error(upload_res)
+
+        if (fileData && file && file.type.includes("image")) {
+            const upload_res = await axios({
+                method: "POST",
+                url: "http://localhost:1337/api/upload",
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    'Authorization': `Bearer ${user.jwt}`
+                },
+                data: fileData,
+            });
+
+            if (upload_res.status === 200) {
+                let imageArrayCopy = [...imageArray];
+                imageArrayCopy.push(upload_res.data[0].url);
+                setImageArray(imageArrayCopy);
+            } else {
+                console.error(upload_res)
+            }
         }
-
-        /* fetch("http://localhost:1337/api/upload", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                "Authorization": "Bearer " + user.jwt
-            },
-            body: JSON.stringify(fileData)
-        }).then(
-            function (res) {
-                console.log("uploadRes", res);
-                return res.json();
-            }
-        ).then(
-            function (data) {
-                console.log("uploadData", data);
-            }
-        ).catch(err => console.error(err)); */
-
     }
 
     const tags = useFetch("http://localhost:1337/api/tags");
 
     function publishPoll() {
-
-        /* const pollRes = await axios.post(
-            'http://localhost:1337/api/polls',
-            {
-                title: title,
-                description: description,
-                author: user.user.id,
-                questions: questions,
-                pollEndsAt: pollEndsAt,
-                answered_polls: [],
-                images: addImage ? imageArray : [],
-                tags: pollTagIds
-            },
-            {
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8",
-                    "Authorization": "Bearer " + user.jwt,
-                },
-            }
-        );
-
-        console.log("pollRes", pollRes);
-
-        if (pollRes && (pollRes.status >= 200 && pollRes.status <= 399)) {
-            navigate("/");
-        } else {
-            console.log(pollRes);
-        } */
 
         fetch("http://localhost:1337/api/polls", {
             method: "POST",
@@ -293,7 +247,6 @@ function CreatePoll(props) {
                                 </div>
                                 <br />
                                 <div>
-                                    {console.log("imageArray", imageArray)}
                                     {
                                         (addImage && imageArray) && imageArray.map((imgUrl, i) =>
                                             <span key={i} className='img-span'>
