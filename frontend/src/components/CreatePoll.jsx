@@ -10,7 +10,7 @@ function CreatePoll(props) {
     const { user, setUser } = useContext(UserContext);
     const userObj = user || JSON.parse(localStorage.getItem("user"));
     const navigate = useNavigate();
-    console.log("user", user);
+    const [errorMsg, setErrorMsg] = useState("");
     //Poll info
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -63,28 +63,65 @@ function CreatePoll(props) {
     const tags = useFetch("http://localhost:1337/api/tags");
 
     function publishPoll() {
-
-        fetch("http://localhost:1337/api/polls", {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8",
-                "Authorization": "Bearer " + user.jwt
-            },
-            body: JSON.stringify({
-                data: {
+        /**
                     title: title,
                     description: description,
                     author: user.user.id,
                     questions: questions,
                     pollEndsAt: pollEndsAt,
                     answered_polls: [],
-                    tags: pollTagIds
+                    tags: pollTagIds 
+        */
+        const inputData = [
+            title,
+            description,
+            user.user.id,
+            questions,
+            pollEndsAt
+        ];
+        let isNotEmpty = true;
+
+        for (let k of inputData) {
+            if (Array.isArray(k)) {
+                if (k.length === 0) {
+                    isNotEmpty = false;
                 }
-            })
-        }).then(r => r.json()).then(d => {
-            navigate("/");
-        }).catch(err => console.log(err));
+            } else if (!k) {
+                isNotEmpty = false;
+            }
+        }
+
+        if (isNotEmpty) {
+            fetch("http://localhost:1337/api/polls", {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    "Authorization": "Bearer " + user.jwt
+                },
+                body: JSON.stringify({
+                    data: {
+                        title: title,
+                        description: description,
+                        author: user.user.id,
+                        questions: questions,
+                        pollEndsAt: pollEndsAt,
+                        answered_polls: [],
+                        tags: pollTagIds
+                    }
+                })
+            }).then(r => r.json()).then(d => {
+                if (d.data) {
+                    navigate("/");
+                } else if (d.error && d.error.message) {
+                    setErrorMsg(d.error.message);
+                } else {
+                    setErrorMsg("An unknown error occurred");
+                }
+            }).catch(err => console.log(err));
+        } else {
+            setErrorMsg("Please fill in ALL the text fields.");
+        }
     }
 
     function handleQuestion(event) {
@@ -95,6 +132,26 @@ function CreatePoll(props) {
             }
         }
     }
+
+    useEffect(() => {
+        if (errorMsg) {
+            const inputData = [
+                title,
+                description,
+                pollEndsAt
+            ];
+            let isNotEmpty = true;
+
+            for (let k of inputData) {
+                if (!k) {
+                    isNotEmpty = false;
+                }
+            }
+            if (isNotEmpty) {
+                setErrorMsg("");
+            }
+        }
+    })
 
     if (user) {
         return (
@@ -107,91 +164,104 @@ function CreatePoll(props) {
                             </h1>
                         </div>
                         <div id="create-poll">
+                            {errorMsg && <p className='errorMsg'>{errorMsg}</p>}
                             <div className="create-top">
                                 <div className='box-1'>
-                                    <div>
-                                        <label htmlFor='new-poll-title'>
-                                            Title:
-                                        </label>
-                                        <input type={"text"} id='new-poll-title' onChange={(e) => setTitle(e.target.value)} />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="tag-list">Tags: </label>
+                                    <div className='box-1-1'>
                                         <div>
-                                            <ul>
-                                                {
-                                                    pollTags.map((tag, i) => <li key={i}>
-                                                        {tag.attributes.name}
-                                                    </li>)
-                                                }
-                                            </ul>
+                                            <label htmlFor='new-poll-title'>
+                                                Title:
+                                            </label>
+                                            <input type={"text"} id='new-poll-title' onChange={(e) => setTitle(e.target.value)} />
                                         </div>
-                                        <input type={"text"} list='tag-list' onChange={(e) => {
-                                            let pollTagsArr = [...pollTags];
-                                            let tagArr = [...tags.data.data];
+                                        <div>
+                                            <div>
+                                                <label htmlFor="tag-list">Tags: </label>
+                                                <input type={"text"} list='tag-list' onChange={(e) => {
+                                                    let pollTagsArr = [...pollTags];
+                                                    let tagArr = [...tags.data.data];
 
-                                            let findTag = [...tagArr].find(t => {
-                                                return t.attributes.name === e.target.value;
-                                            });
+                                                    let findTag = [...tagArr].find(t => {
+                                                        return t.attributes.name === e.target.value;
+                                                    });
 
-                                            findTag && pollTagsArr.push(findTag);
+                                                    findTag && pollTagsArr.push(findTag);
 
-                                            let arrRemoveDuplicates = pollTagsArr.filter((t, index) => {
-                                                return pollTagsArr.indexOf(t) === index;
-                                            });
+                                                    let arrRemoveDuplicates = pollTagsArr.filter((t, index) => {
+                                                        return pollTagsArr.indexOf(t) === index;
+                                                    });
 
-                                            let tagArray = arrRemoveDuplicates.map(i => i.id);
+                                                    let tagArray = arrRemoveDuplicates.map(i => i.id);
 
-                                            setTagWord(e.target.value);
-                                            setPollTags(arrRemoveDuplicates);
-                                            setPollTagIds(tagArray);
-                                        }} />
-                                        <datalist id='tag-list'>
-                                            {
-                                                (!tags.loading && !tags.error)
-                                                    ? tags.data.data.map((tag, i) => {
-                                                        return (
-                                                            <option key={i} value={tag.attributes.name}>
-                                                                {tag.attributes.name}
-                                                            </option>
-                                                        )
+                                                    setTagWord(e.target.value);
+                                                    setPollTags(arrRemoveDuplicates);
+                                                    setPollTagIds(tagArray);
+                                                }} />
+                                                <datalist id='tag-list'>
+                                                    {
+                                                        (!tags.loading && !tags.error)
+                                                            ? tags.data.data.map((tag, i) => {
+                                                                return (
+                                                                    <option key={i} value={tag.attributes.name}>
+                                                                        {tag.attributes.name}
+                                                                    </option>
+                                                                )
+                                                            }
+                                                            ) : ""
                                                     }
-                                                    ) : ""
-                                            }
-                                        </datalist>
-                                        {
-                                            ((!tags.loading && !tags.error) &&
-                                                tags.data.data.find((tag, i) => {
-                                                    if (tag.attributes.name.toLowerCase().includes(tagWord.toLowerCase())) {
-                                                        return true
-                                                    }
-                                                })) ? "" : <button
-                                                    className='scnd-btn'
-                                                    onClick={() => {
-                                                        fetch("http://localhost:1337/api/tags", {
-                                                            method: "POST",
-                                                            mode: "cors",
-                                                            headers: {
-                                                                "Content-type": "application/json; charset=UTF-8",
-                                                                "Authorization": "Bearer " + user.jwt
-                                                            },
-                                                            body: JSON.stringify({
-                                                                data: {
-                                                                    name: tagWord,
-                                                                    polls: []
-                                                                }
-                                                            })
-                                                        }).then(r => r.json()).then(d => {
-                                                            let pollTagsCopy = [...pollTags];
-                                                            let pollTagIdsCopy = [...pollTagIds];
-                                                            pollTagsCopy.push(d.data);
-                                                            pollTagIdsCopy.push(d.data.id);
-                                                            setPollTags(pollTagsCopy);
-                                                            setPollTagIds(pollTagIdsCopy);
-                                                        }).catch(err => console.log(err));
-                                                    }}>Create new category</button>
-                                        }
+                                                </datalist>
+                                                <div>
+                                                    <ul className='added-tags'>
+                                                        {
+                                                            pollTags.map((tag, i) => <li key={i}>
+                                                                <p>{tag.attributes.name}</p><span className='X' onClick={() => {
+                                                                    let pollTagCopy = [...pollTags];
+                                                                    let pollTagIdCopy = [...pollTagIds];
+                                                                    pollTagCopy.splice(i, 1);
+                                                                    pollTagIdCopy.splice(i, 1);
+                                                                    setPollTagIds(pollTagIdCopy);
+                                                                    setPollTags(pollTagCopy);
+                                                                }}>x</span>
+                                                            </li>)
+                                                        }
+                                                    </ul>
+                                                </div>
+                                                {
+                                                    ((!tags.loading && !tags.error) &&
+                                                        tags.data.data.find((tag, i) => {
+                                                            if (tag.attributes.name.toLowerCase().includes(tagWord.toLowerCase())) {
+                                                                return true
+                                                            }
+                                                        })) ? "" : <button
+                                                            className='scnd-btn'
+                                                            onClick={() => {
+                                                                fetch("http://localhost:1337/api/tags", {
+                                                                    method: "POST",
+                                                                    mode: "cors",
+                                                                    headers: {
+                                                                        "Content-type": "application/json; charset=UTF-8",
+                                                                        "Authorization": "Bearer " + user.jwt
+                                                                    },
+                                                                    body: JSON.stringify({
+                                                                        data: {
+                                                                            name: tagWord,
+                                                                            polls: []
+                                                                        }
+                                                                    })
+                                                                }).then(r => r.json()).then(d => {
+                                                                    let pollTagsCopy = [...pollTags];
+                                                                    let pollTagIdsCopy = [...pollTagIds];
+                                                                    pollTagsCopy.push(d.data);
+                                                                    pollTagIdsCopy.push(d.data.id);
+                                                                    setPollTags(pollTagsCopy);
+                                                                    setPollTagIds(pollTagIdsCopy);
+                                                                }).catch(err => console.log(err));
+                                                            }}>Create new category</button>
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
+
                                 </div>
                                 <div>
                                     <label htmlFor='new-poll-desc'>
@@ -218,12 +288,12 @@ function CreatePoll(props) {
                                                     newArr.splice(i, 1);
                                                     setQuestions(newArr);
                                                 }} className='X'>
-                                                    X
+                                                    x
                                                 </h3>
                                             </span>
                                         </div>
                                         {
-                                            q.options && q.options.map((o, j) => <span key={j}>
+                                            q.options && q.options.map((o, j) => <span className='created-option' key={j}>
                                                 {`${o} `}
                                             </span>)
                                         }
@@ -235,14 +305,17 @@ function CreatePoll(props) {
                                     <label htmlFor='question'>
                                         Question:
                                     </label>
-                                    <input type={"text"} value={currentQuestion} id='question' onChange={(e) => setCurrentQuestion(e.target.value)} />
+                                    <input type={"text"} value={currentQuestion} id='question' onChange={(e) => setCurrentQuestion(e.target.value)} /><br />
                                     {
                                         addImage
-                                            ? <button onClick={() => {
-                                                setAddImage(false)
-                                                setImageArray([])
-                                            }}>Don't use images</button>
-                                            : <button onClick={() => setAddImage(true)}>Use images</button>
+                                            ? <button className='scnd-btn'
+                                                onClick={() => {
+                                                    setAddImage(false)
+                                                    setImageArray([])
+                                                }}>Don't use images</button>
+                                            : <button
+                                                className='scnd-btn'
+                                                onClick={() => setAddImage(true)}>Use images</button>
                                     }
                                 </div>
                                 <br />
@@ -272,7 +345,7 @@ function CreatePoll(props) {
                                     }
                                 </div>
                                 <br />
-                                <div>
+                                <div className='typeof-question'>
                                     <input
                                         type={"radio"}
                                         defaultChecked={false}
@@ -282,7 +355,7 @@ function CreatePoll(props) {
                                         onChange={(e) => {
                                             handleQuestion(e)
                                         }} />
-                                    <label htmlFor='radio'>Radio</label>
+                                    <label htmlFor='radio'>One-choice</label>
 
                                     <input
                                         type={"radio"}
@@ -293,7 +366,7 @@ function CreatePoll(props) {
                                         onChange={(e) => {
                                             handleQuestion(e)
                                         }} />
-                                    <label htmlFor='checkbox'>Checkbox</label>
+                                    <label htmlFor='checkbox'>Multiple-choice</label>
 
                                     <input
                                         type={"radio"}
@@ -341,7 +414,7 @@ function CreatePoll(props) {
                                                                 setCurrentOptions(arr);
                                                             }
                                                         }}>
-                                                        X
+                                                        x
                                                     </span>
                                                 </span>
                                             })
@@ -356,7 +429,7 @@ function CreatePoll(props) {
                                     </div>
                                 }
                             </div>
-                            <button className='scnd-btn' onClick={() => {
+                            <button onClick={() => {
                                 let cond1 = (
                                     currentQuestion.replace(/\s/g, '').length !== 0 &&
                                     currentQuestionType.replace(/\s/g, '').length !== 0
@@ -387,7 +460,7 @@ function CreatePoll(props) {
                             </button>
                         </div>
                         <div className='create-bottom'>
-                            <button onClick={() => publishPoll()}>
+                            <button className='publish-btn' onClick={() => publishPoll()}>
                                 Publish
                             </button>
                         </div>

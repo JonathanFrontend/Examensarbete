@@ -10,7 +10,7 @@ function NavBar() {
     const pollQuestions = useSelector(state => state.pollQuestions);
     const pollInfo = useSelector(state => state.pollInfo);
 
-    const insp = () => {
+    /* const insp = () => {
         const rand = Math.round(Math.random() * 4);
         switch (rand) {
             case 1:
@@ -24,12 +24,12 @@ function NavBar() {
             default:
                 return "your opinion matters";
         }
-    }
+    } */
 
     return (
         <nav className='nav'>
             <div className='box-1'>
-                <h1 className='nav-h1'>Powler</h1> <span> <p> - {insp()} </p> </span>
+                <h1 className='nav-h1'>Powler</h1> {/* <span> <p> - {insp()} </p> </span> */}
             </div>
             <div className='box-2'>
                 {

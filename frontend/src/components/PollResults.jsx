@@ -119,7 +119,7 @@ function PollResults(props) {
                     </div>
                     <div className='result-box'>
                         {
-                            thePollResults ? thePollResults.map((q, i) => <ResultQuestion key={i} qna={q} poll={currentPoll} />) : "loading... please wait"
+                            thePollResults ? thePollResults.map((q, i) => <ResultQuestion key={i} qna={q} qIndex={i} poll={currentPoll} />) : "loading... please wait"
                         }
                     </div>
                     <button onClick={() => navigate('/start')}>
