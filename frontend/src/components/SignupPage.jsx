@@ -21,7 +21,7 @@ function LoginPage(props) {
                     </div>
                     <div className='login-div'>
                         <div>
-                            <p>
+                            <p className='errorMsg'>
                                 {errorMsg}
                             </p>
                         </div>
@@ -41,25 +41,29 @@ function LoginPage(props) {
                         </div>
                         <button onClick={() => {
 
-                            fetch("http://localhost:1337/api/auth/local/register", {
-                                method: "POST",
-                                headers: { "Content-type": "application/json; charset=UTF-8" },
-                                body: JSON.stringify({
-                                    username: usernameinput,
-                                    password: passwordinput,
-                                    email: emailinput
-                                })
-                            }).then(r => r.json()).then(userData => {
-                                if (userData.user && userData.jwt) {
-                                    setUser(userData);
-                                    localStorage.setItem("user", JSON.stringify(userData));
-                                    navigate('/');
-                                } else if (userData.error && userData.error.message) {
-                                    setErrorMsg(userData.error.message)
-                                } else {
-                                    setErrorMsg("An unknown error occurred.")
-                                }
-                            }).catch(err => console.error(err));
+                            if (!usernameinput.includes("@")) {
+                                fetch("http://localhost:1337/api/auth/local/register", {
+                                    method: "POST",
+                                    headers: { "Content-type": "application/json; charset=UTF-8" },
+                                    body: JSON.stringify({
+                                        username: usernameinput,
+                                        password: passwordinput,
+                                        email: emailinput
+                                    })
+                                }).then(r => r.json()).then(userData => {
+                                    if (userData.user && userData.jwt) {
+                                        setUser(userData);
+                                        localStorage.setItem("user", JSON.stringify(userData));
+                                        navigate('/');
+                                    } else if (userData.error && userData.error.message) {
+                                        setErrorMsg(userData.error.message)
+                                    } else {
+                                        setErrorMsg("An unknown error occurred.")
+                                    }
+                                }).catch(err => console.error(err));
+                            } else {
+                                setErrorMsg("Invalid username.")
+                            }
 
                         }}>Sign up</button>
                     </div>

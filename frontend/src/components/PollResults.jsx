@@ -117,7 +117,7 @@ function PollResults(props) {
                             }
                         </h1>
                     </div>
-                    <div className='result-box'>
+                    <div className='result-box box-2'>
                         {
                             thePollResults ? thePollResults.map((q, i) => <ResultQuestion key={i} qna={q} qIndex={i} poll={currentPoll} />) : "loading... please wait"
                         }

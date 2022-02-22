@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import ImgComp from './ImgComp';
 
 function ResultQuestion({ qna, qIndex, poll }) {
     const [totalVotes, setTotalVotes] = useState(0);
@@ -15,7 +16,7 @@ function ResultQuestion({ qna, qIndex, poll }) {
         {
             (poll.questions[qIndex].images && poll.questions[qIndex].images.length > 0) &&
             poll.questions[qIndex].images.map((p, i) => <span key={i} className='img-span'>
-                <img src={`http://localhost:1337${p}`} width="200" />
+                <ImgComp imgSrc={`http://localhost:1337${p}`} alt={`Image ${i + 1}`} />
                 <p> {"Images " + i + 1} </p>
             </span>)
         }

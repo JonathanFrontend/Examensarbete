@@ -76,7 +76,7 @@ function PollPage(props) {
                                 }
                             </h1>
                         </div>
-                        <div>
+                        <div className='box-2'>
                             {
                                 pollQuestions.map((q, i) => <Question key={i} index={i} question={q} unanswered={unanswered} />)
                             }

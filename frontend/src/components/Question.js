@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import RadioQuestion from '../QuestionTypes/RadioQuestion';
 import RatingQuestion from '../QuestionTypes/RatingQuestion';
 import CheckboxQuestion from '../QuestionTypes/CheckboxQuestion';
 import TextQuestion from '../QuestionTypes/TextQuestion';
 import { useSelector } from 'react-redux';
+import ImgComp from './ImgComp';
 
 function Scanner({ q, qIndex }) {
     // console.log("q", q)
@@ -31,8 +32,8 @@ function Question({ question, index, unanswered }) {
             {
                 (question.images && question.images.length > 0) &&
                 question.images.map((p, i) => <span key={i} className='img-span'>
-                    <img src={`http://localhost:1337${p}`} width="200" />
-                    <p> {"Images " + i + 1} </p>
+                    <ImgComp imgSrc={`http://localhost:1337${p}`} alt={`Image ${i + 1}`} />
+                    <p> {`Image ${i + 1}`} </p>
                 </span>)
             }
             {
