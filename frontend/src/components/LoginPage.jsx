@@ -7,6 +7,7 @@ function LoginPage(props) {
     const [emailinput, setEmailInput] = useState("");
     const [passwordinput, setPasswordinput] = useState("");
     const [couldNotLogIn, setCouldNotLogIn] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
     const navigate = useNavigate();
     return (
         <main className='main start-main login-main'>
@@ -18,10 +19,15 @@ function LoginPage(props) {
                         </h1>
                     </div>
                     <div className='login-div'>
+                        <div className='errorMsg'>
+                            {
+                                errorMsg && errorMsg
+                            }
+                        </div>
                         <div>
                             <label className='login-label' htmlFor='email'>Email </label><br />
                             <input
-                                className={(couldNotLogIn && emailinput === "") ? "couldNotLogIn" : ""}
+                                className={(couldNotLogIn) ? "couldNotLogIn" : ""}
                                 type={"email"}
                                 id="email"
                                 onChange={(e) => setEmailInput(e.target.value)} />
@@ -29,7 +35,7 @@ function LoginPage(props) {
                         <div>
                             <label className='login-label' htmlFor='password'>Password </label><br />
                             <input
-                                className={(couldNotLogIn && passwordinput === "") ? "couldNotLogIn" : ""}
+                                className={(couldNotLogIn) ? "couldNotLogIn" : ""}
                                 type={"password"}
                                 id="password"
                                 onChange={(e) => setPasswordinput(e.target.value)} />
@@ -46,12 +52,17 @@ function LoginPage(props) {
                                         password: passwordinput
                                     })
                                 }).then(r => r.json()).then(d => {
+                                    console.log(d)
                                     if (d.user) {
                                         setUser(d);
                                         localStorage.setItem("user", JSON.stringify(d));
                                         navigate('/user')
+                                    } else if (d.error && d.error.message) {
+                                        setCouldNotLogIn(true)
+                                        setErrorMsg(d.error.message)
                                     } else {
                                         setCouldNotLogIn(true)
+                                        setErrorMsg("An unknown error occurred.")
                                     }
 
                                 }).catch(err => {
